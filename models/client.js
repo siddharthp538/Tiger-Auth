@@ -3,12 +3,10 @@ let mongoose  = require('mongoose');
 let ClientSchema = mongoose.Schema({
   website_name: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
-  users: {
-    type: String,
-    required: true
-  },
+  users: [{ type: mongoose.Types.ObjectId , ref: 'User'}],
   callback_url: {
       type: String,
       required: true

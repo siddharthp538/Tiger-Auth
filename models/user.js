@@ -11,7 +11,8 @@ let UserSchema = mongoose.Schema({
   },
   username: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
   phone: {
       type: String,
@@ -23,11 +24,13 @@ let UserSchema = mongoose.Schema({
   },
   img: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
   audio: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   }
 
 });
