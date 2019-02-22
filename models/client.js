@@ -1,6 +1,6 @@
 let mongoose  = require('mongoose');
 
-let ClientSchema = mongoose.schema({
+let ClientSchema = mongoose.Schema({
   website_name: {
     type: String,
     required: true
