@@ -1,7 +1,11 @@
 let mongoose  = require('mongoose');
 
 let UserSchema = mongoose.schema({
-  name: {
+  fname: {
+    type: String,
+    required: true
+  },
+  lname: {
     type: String,
     required: true
   },
@@ -20,7 +24,12 @@ let UserSchema = mongoose.schema({
   img: {
     type: String,
     required: true
+  },
+  audio: {
+    type: String,
+    required: true
   }
+
 });
 
 let User = module.exports = mongoose.model('User', UserSchema);
