@@ -6,8 +6,9 @@ let ClientSchema = mongoose.Schema({
     required: true
   },
   users: {
-    type: String,
-    required: true
+    type: Array,
+    required: true,
+    ref: 'user'
   },
   callback_url: {
       type: String,

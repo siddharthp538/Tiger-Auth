@@ -1,6 +1,7 @@
 const express = require('express');
 const app=express();
 const mongoose = require('mongoose');
+const multer = require('multer');
 
 const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
 mongoose.connect(mongoURI,{
