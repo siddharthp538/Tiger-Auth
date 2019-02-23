@@ -11,6 +11,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "folder-hash": "^2.1.2",
     "fs": "0.0.1-security",
     "messagebird": "^2.4.0",
     "mongoose": "^5.4.14",
