@@ -17,13 +17,15 @@ router.post('/submit', (req,res)=>{
     user.phone = req.body.phone;
     user.dob = req.body.dob;
     const dir = `../../biometrics/${user.username}/`;
-    fs.mkdirSync(dir);
-    user = face_store(user , req.body.img);
-    user = voice_store(user, req.body.audio);
-    
+    fs.mkdirSync(dir);   
+    user = await face_store(user , req.body.img);
+    user = await voice_store(user, req.body.audio);
+    await user.save();
   }
-  catch{
-
+  catch (err){
+    res.status(400).send({
+      message: err.message 
+    });
   }
 });
 
@@ -41,8 +43,8 @@ function voice_store(user, voice){
   user.audio =`/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/` +  voice_name;
   fs.writeFileSync(user.audio, voice, (err, voice)=>{
     if(err){
-      console.log('Error Occurred');
-      throw Error('Some Error Occurred!');
+      console.log('Audio not stored!');
+      throw Error('Audio could not be stored!');
     }
     else{
       console.log('Audio is getting stored!');
