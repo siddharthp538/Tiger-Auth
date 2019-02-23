@@ -8,20 +8,27 @@ const mongoose = require('mongoose');
 const db = mongoose.connection;
 
 const way2sms = require('way2sms');
-
 router.post('/submit', async (req,res)=>{
   try{
+    console.log('i am here!');
     let user = new User();
     user.username = req.body.username;
     user.name = req.body.name ; 
     user.phone = req.body.phone;
     user.dob = req.body.dob;
-    const dir = `../../biometrics/${user.username}/`;
-    fs.mkdirSync(dir);   
-    user = await face_store(user , req.body.img);
-    user = await voice_store(user, req.body.audio);
-    await user.save();
-    res.send('Done!');
+    const dir = `/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/`	;
+    let dir1 = path.join(__dirname,`../../biometrics/${user.username}/`);
+	    await fs.mkdir(dir1,{recursive: true} , (err)=>{
+	      if(err) throw err;
+	    });   
+	    console.log(dir);
+	    console.log(user + '--------------1')
+	    user = await face_store(user , req.body.img);
+	    console.log(user + '--------------2')
+	    user = await voice_store(user, req.body.audio);
+	    await user.save();
+	    await computehash();
+	    res.send('Done!');
   
   }
   catch (err){
@@ -36,14 +43,15 @@ function face_store(user, data){
   let buff = new Buffer(temp_data, 'base64');  
   const extension = ".png";
   const img_name =  'face_'+user.username +  extension;
-  user.img =`/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/` +  img_name;
+  user.img =path.join(__dirname,`../../biometrics/${user.username}/`) +  img_name;
   fs.writeFileSync(user.img, buff);
   return user;
 }
+
 function voice_store(user, voice){
   const voice_name =  'voice_'+user.username +  ".wav";
   
-  user.audio =`/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/` +  voice_name;
+  user.audio =path.join(__dirname,`../../biometrics/${user.username}/`) +  voice_name;
   fs.writeFileSync(user.audio, voice, (err, voice)=>{
     if(err){
       console.log('Audio not stored!');
@@ -51,9 +59,10 @@ function voice_store(user, voice){
     }
     else{
       console.log('Audio is getting stored!');
-      return user;
     }
   });
+  return user;
+
 }
 
 

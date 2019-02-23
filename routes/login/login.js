@@ -1,4 +1,4 @@
 const express = require('express');
 const app = express();
 
-router.post(/getForm)
+router.post('/getForm', (req,res)=>{})

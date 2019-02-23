@@ -4,10 +4,13 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const bodyParser =  require('body-parser');
 const messagebird = require('messagebird');
+const path = require('path');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
+
+app.use (express.static(path.join(__dirname,'biometrics')))
 const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
 mongoose.connect(mongoURI,{
   useNewUrlParser: true 
