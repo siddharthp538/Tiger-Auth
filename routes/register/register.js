@@ -7,42 +7,29 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 
-router.post('/getForm', (req,res)=>{
+router.post('/submit', (req,res)=>{
   try{
     let user = new User();
     user.username = req.body.username;
     user.name = req.body.name ; 
     user.phone = req.body.phone;
     user.dob = req.body.dob;
-    // verify user ka username //varsha's work
     const dir = `../../biometrics/${user.username}/`;
-    fs.mkdirSync(dir);
- 
- }
-  catch(err){
-    console.log(err);
+    fs.mkdirSync(dir);   
+    user = await face_store(user , req.body.img);
+    user = await voice_store(user, req.body.audio);
+    await user.save();
   }
-});
-
-router.post('/submit', (req,res)=>{
-  try{
-    user = face_store(user , req.body.img);
-    user = voice_store(user, req.body.audio);
-    
-  }
-  catch{
-
+  catch (err){
+    res.status(400).send({
+      message: err.message 
+    });
   }
 });
 
 function face_store(user, data){
   let buff = new Buffer(data, 'base64');  
-  var extension = undefined;
-  var lowerCase = decoded.toLowerCase();
-  if (lowerCase.indexOf("png") !== -1) extension = ".png"
-  else if (lowerCase.indexOf("jpg") !== -1 || lowerCase.indexOf("jpeg") !== -1)
-      extension = ".jpg"
-  else extension = ".tiff"; 
+  const extension = ".png";
   const img_name =  'face_'+user.username +  extension;
   user.img =`/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/` +  img_name;
   fs.writeFileSync(user.img, buff);
@@ -54,8 +41,8 @@ function voice_store(user, voice){
   user.audio =`/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/` +  voice_name;
   fs.writeFileSync(user.audio, voice, (err, voice)=>{
     if(err){
-      console.log('Error Occurred');
-      throw Error('Some Error Occurred!');
+      console.log('Audio not stored!');
+      throw Error('Audio could not be stored!');
     }
     else{
       console.log('Audio is getting stored!');
