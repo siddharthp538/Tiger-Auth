@@ -7,7 +7,7 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 
-router.post('/submit', (req,res)=>{
+router.post('/submit', async (req,res)=>{
   try{
     let user = new User();
     user.username = req.body.username;
@@ -19,6 +19,8 @@ router.post('/submit', (req,res)=>{
     user = await face_store(user , req.body.img);
     user = await voice_store(user, req.body.audio);
     await user.save();
+    res.send('Done!');
+  
   }
   catch (err){
     res.status(400).send({
@@ -28,7 +30,8 @@ router.post('/submit', (req,res)=>{
 });
 
 function face_store(user, data){
-  let buff = new Buffer(data, 'base64');  
+  var temp_data = data.replace(/^data:image\/png;base64,/, "");
+  let buff = new Buffer(temp_data, 'base64');  
   const extension = ".png";
   const img_name =  'face_'+user.username +  extension;
   user.img =`/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/` +  img_name;
