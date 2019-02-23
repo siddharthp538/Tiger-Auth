@@ -17,18 +17,7 @@ router.post('/getForm', (req,res)=>{
     // verify user ka username //varsha's work
     const dir = `../../biometrics/${user.username}/`;
     fs.mkdirSync(dir);
-    const face_data = ''; // data which i am going to receive from front end!
-    user = face_store(user, face_data);
-    user = voice_store(user, voice_data);
-    // after successful user registration, create his folder 
-    if (!fs.existsSync(dir)){
-      fs.mkdirSync(dir);
-    }   
-    user.save((err)=>{
-      if(err){
-        throw Error('Something Went Wrong! Please try registring again!');
-      }
-    })
+ 
  }
   catch(err){
     console.log(err);
@@ -37,8 +26,9 @@ router.post('/getForm', (req,res)=>{
 
 router.post('/submit', (req,res)=>{
   try{
-    face_store(user , )
-
+    user = face_store(user , req.body.img);
+    user = voice_store(user, req.body.audio);
+    
   }
   catch{
 
@@ -49,34 +39,27 @@ function face_store(user, data){
   let buff = new Buffer(data, 'base64');  
   var extension = undefined;
   var lowerCase = decoded.toLowerCase();
-  if (lowerCase.indexOf("png") !== -1) extension = "png"
+  if (lowerCase.indexOf("png") !== -1) extension = ".png"
   else if (lowerCase.indexOf("jpg") !== -1 || lowerCase.indexOf("jpeg") !== -1)
-      extension = "jpg"
-  else extension = "tiff"; 
-  const img_name =  'face_'+user.username + extension;
-  user.img ='/home/siddharthp538/Tiger-Auth/biometrics/' +  img_name;
-  fs.writeFileSync('/home/siddharthp538/Tiger-Auth/biometrics/' + name, buff);
+      extension = ".jpg"
+  else extension = ".tiff"; 
+  const img_name =  'face_'+user.username +  extension;
+  user.img =`/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/` +  img_name;
+  fs.writeFileSync(user.img, buff);
   return user;
 }
-function voice_store(user){
-  const storage = multer.diskStorage({
-    destination: `./biometrics/${user.username}/`,
-    filename: (req,res,next)=>{
-      cb(null, Date.now() + file.extname(file.originalname));
-    }
-  });
+function voice_store(user, voice){
+  const voice_name =  'voice_'+user.username +  ".wav";
   
-  const upload = multer({
-    storage : storage
-  }).single('myVoice');
-  
-  upload(req,res,(err)=>{
+  user.audio =`/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/` +  voice_name;
+  fs.writeFileSync(user.audio, voice, (err, voice)=>{
     if(err){
-      throw err;
+      console.log('Error Occurred');
+      throw Error('Some Error Occurred!');
     }
     else{
-      console.log(req.file);
-      req.img = `/biometrics/${user.username}/${req.file.filename}`
+      console.log('Audio is getting stored!');
+      return user;
     }
   });
 }
