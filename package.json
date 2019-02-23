@@ -10,9 +10,16 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
+<<<<<<< Updated upstream
     "fs": "0.0.1-security",
     "mongoose": "^5.4.14",
     "multer": "^1.4.1",
     "nodemon": "^1.18.9"
+=======
+    "messagebird": "^2.4.0",
+    "mongoose": "^5.4.14",
+    "nodemon": "^1.18.9",
+    "way2sms": "^1.0.2"
+>>>>>>> Stashed changes
   }
 }

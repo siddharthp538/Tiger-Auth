@@ -7,25 +7,17 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 
-router.post('/getForm', (req,res)=>{
+const way2sms = require('way2sms');
+
+router.post('/submit', (req,res)=>{
   try{
     let user = new User();
     user.username = req.body.username;
     user.name = req.body.name ; 
     user.phone = req.body.phone;
     user.dob = req.body.dob;
-    // verify user ka username //varsha's work
     const dir = `../../biometrics/${user.username}/`;
     fs.mkdirSync(dir);
- 
- }
-  catch(err){
-    console.log(err);
-  }
-});
-
-router.post('/submit', (req,res)=>{
-  try{
     user = face_store(user , req.body.img);
     user = voice_store(user, req.body.audio);
     
@@ -37,12 +29,7 @@ router.post('/submit', (req,res)=>{
 
 function face_store(user, data){
   let buff = new Buffer(data, 'base64');  
-  var extension = undefined;
-  var lowerCase = decoded.toLowerCase();
-  if (lowerCase.indexOf("png") !== -1) extension = ".png"
-  else if (lowerCase.indexOf("jpg") !== -1 || lowerCase.indexOf("jpeg") !== -1)
-      extension = ".jpg"
-  else extension = ".tiff"; 
+  const extension = ".png";
   const img_name =  'face_'+user.username +  extension;
   user.img =`/home/siddharthp538/Tiger-Auth/biometrics/${user.username}/` +  img_name;
   fs.writeFileSync(user.img, buff);
@@ -63,5 +50,55 @@ function voice_store(user, voice){
     }
   });
 }
+
+
+router.post('/verifyUsername' , async(req,res) => {
+  console.log(req.body.username)
+  if(await User.findOne({username : req.username})) {
+    return  res.status(400).send({
+        message: 'Please enter a Unique username!'
+   });
+  } else {
+    return res.status(200).send({
+      message: 'okay'
+    })
+  }
+});
+
+router.post('/verifyOTP' , async(req,res) => {
+  
+// way2sms.reLogin(<mobileno>, <password>): returns login cookie (promise)
+// way2sms.smstoss(<cookie>, <tomobile>, <message>): sends sms (promise)
+ console.log(req.body)
+cookie = await way2sms.login('9773160417', 'Sagarika@123'); // reLogin
+// <cookie string>
+ 
+const mihir = '8451885129';
+const lavina = '9820990200'; 
+const gayatri = '8689931697';
+const siddharth= '8850949073';
+const shruti = '7718826362';
+const varsha = '9773160417';
+const otp  =  Math.floor(100000 + Math.random() * 900000);
+console.log(otp + req.body.number)
+try {
+await way2sms.send(cookie,req.body.number,`Your One time Password is ${Math.floor(100000 + Math.random() * 900000)}`);
+//await way2sms.send(cookie, lavina , 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
+//await way2sms.send(cookie, gayatri, 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
+//await way2sms.send(cookie, siddharth, 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
+//await way2sms.send(cookie, shruti, 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
+//await way2sms.send(cookie, varsha, 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
+} catch (error) {
+  console.log(error);
+  console.log(JSON.stringify(error))
+  return res.status(400).send({
+    message: 'Error in Sending OTP to the following number',
+  });
+} 
+return res.status(200).send({
+  otp
+});
+
+})
 
 module.exports = router;
