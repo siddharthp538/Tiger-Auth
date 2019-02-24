@@ -36,7 +36,7 @@ app.use('/login',login);
 app.post('/audio', (req,res)=>{
   const data = req.body;
   console.log(data);
-  fs.writeFileSync('./biometrics/mihir1.wav', data, (err, data)=>{
+  fs.writeFileSync('./biometrics/mihir2.wav', data, (err, data)=>{
     if(err){
       console.log('Audio not stored!');
       throw Error('Audio could not be stored!');
