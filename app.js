@@ -29,7 +29,7 @@ app.get('/', (req,res)=>{
 });
 
 const register = require('./routes/register/register');
-const check = require('./routes/check');
+const check = require('./routes/login/check');
 app.use('/register',register);
 app.use('/check',check);
 
