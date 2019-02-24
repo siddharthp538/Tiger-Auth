@@ -42,9 +42,11 @@ app.post('/audio', (req,res)=>{
 });
 
 app.post('/video', (req,res)=>{
+  console.log(req.body);
   var temp_data = req.body.video.replace(/^data:video\/webm;base64,/, "");
+  const blinks_done = req.body.blinks;
   let buff = new Buffer(temp_data, 'base64');
-  fs.writeFileSync('./lavina.webm', buff);
+  fs.writeFileSync('./lavina1.webm', buff);
   res.send('Done!');
 });
 
