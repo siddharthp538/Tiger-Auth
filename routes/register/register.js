@@ -10,7 +10,6 @@ const db = mongoose.connection;
 const way2sms = require('way2sms');
 router.post('/submit', async (req,res)=>{
   try{
-    console.log('i am here!');
     let user = new User();
     user.username = req.body.username;
     user.name = req.body.name ; 
@@ -21,13 +20,11 @@ router.post('/submit', async (req,res)=>{
 	    await fs.mkdir(dir1,{recursive: true} , (err)=>{
 	      if(err) throw err;
 	    });   
-	    console.log(dir);
-	    console.log(user + '--------------1')
+
 	    user = await face_store(user , req.body.img);
-	    console.log(user + '--------------2')
 	    user = await voice_store(user, req.body.audio);
 	    await user.save();
-	    await computehash();
+	   // await computehash(req.body.username);
 	    res.send('Done!');
   
   }
@@ -75,7 +72,7 @@ router.post('/verifyUsername' , async(req,res) => {
   } else {
     return res.status(200).send({
       message: 'okay'
-    })
+    });
   }
 });
 

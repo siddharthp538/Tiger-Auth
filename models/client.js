@@ -1,25 +1,17 @@
 let mongoose  = require('mongoose');
 
 let ClientSchema = mongoose.Schema({
-  website_name: {
+  websiteName : {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
-  users: [{ type: mongoose.Types.ObjectId , ref: 'User'}],
-  callback_url: {
-      type: String,
-      required: true
-  },
-  secret_key: {
+  secretKey : {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
-  type_auth: {
-    type: String,
-    required: true
-  },
-  permissions: {
+  token: {
     type: String,
     required: true
   }
