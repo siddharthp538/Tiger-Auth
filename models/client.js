@@ -1,7 +1,7 @@
 let mongoose  = require('mongoose');
 
 let ClientSchema = mongoose.Schema({
-  websiteName : {
+  domainName : {
     type: String,
     required: true,
     unique: true
@@ -10,10 +10,6 @@ let ClientSchema = mongoose.Schema({
     type: String,
     required: true,
     unique: true
-  },
-  token: {
-    type: String,
-    required: true
   }
 });
 
