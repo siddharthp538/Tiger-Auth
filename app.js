@@ -6,9 +6,10 @@ const bodyParser =  require('body-parser');
 const messagebird = require('messagebird');
 const path = require('path');
 const fs = require('fs');
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+const cors = require('cors');
+app.use(cors());
+app.use(bodyParser.json({ limit: '10mb', extended: true }))
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 
 app.use (express.static(path.join(__dirname,'biometrics')));
 const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
@@ -25,7 +26,7 @@ mongoose.connect(mongoURI,{
 
 var db = mongoose.connection;
 app.get('/', (req,res)=>{
-  res.send({'Hello':'Hi'});
+  res.send('Welcome to TigerAuth!');
 });
 
 const register = require('./routes/register/register');
@@ -33,18 +34,17 @@ const check = require('./routes/login/check');
 app.use('/register',register);
 app.use('/check',check);
 
-app.post('/audio', (req,res)=>{
-  const data = req.body;
-  console.log(data);
-  fs.writeFileSync('./biometrics/mihir2.wav', data, (err, data)=>{
-    if(err){
-      console.log('Audio not stored!');
-      throw Error('Audio could not be stored!');
-    }
-    else{
-      console.log('Audio is getting stored!');
-    }
-  });
+app.post('/audio', (req,res)=>{   
+  var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");
+  let buff = new Buffer(temp_data, 'base64');  
+  fs.writeFileSync('./mihir.wav', buff);
+  res.send('Done!');
+});
+
+app.post('/video', (req,res)=>{
+  var temp_data = req.body.video.replace(/^data:video\/webm;base64,/, "");
+  let buff = new Buffer(temp_data, 'base64');
+  fs.writeFileSync('./lavina.webm', buff);
   res.send('Done!');
 });
 
