@@ -6,7 +6,7 @@ const path = require('path');
 const multer = require('multer');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
-
+const { hashElement } = require('folder-hash');
 const way2sms = require('way2sms');
 router.post('/submit', async (req,res)=>{
   try{
@@ -24,7 +24,7 @@ router.post('/submit', async (req,res)=>{
 	    user = await face_store(user , req.body.img);
 	    user = await voice_store(user, req.body.audio);
 	    await user.save();
-	   // await computehash(req.body.username);
+	    await computeAndStoreHash(req.body.username);
 	    res.send('Done!');
   
   }
@@ -77,12 +77,9 @@ router.post('/verifyUsername' , async(req,res) => {
 });
 
 router.post('/verifyOTP' , async(req,res) => {
-  
-// way2sms.reLogin(<mobileno>, <password>): returns login cookie (promise)
-// way2sms.smstoss(<cookie>, <tomobile>, <message>): sends sms (promise)
+
  console.log(req.body)
 cookie = await way2sms.login('9773160417', 'Sagarika@123'); // reLogin
-// <cookie string>
  
 const mihir = '8451885129';
 const lavina = '9820990200'; 
@@ -91,14 +88,9 @@ const siddharth= '8850949073';
 const shruti = '7718826362';
 const varsha = '9773160417';
 const otp  =  Math.floor(100000 + Math.random() * 900000);
-console.log(otp + req.body.number)
+console.log(otp + req.body.phone)
 try {
 await way2sms.send(cookie,req.body.number,`Your One time Password is ${Math.floor(100000 + Math.random() * 900000)}`);
-//await way2sms.send(cookie, lavina , 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
-//await way2sms.send(cookie, gayatri, 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
-//await way2sms.send(cookie, siddharth, 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
-//await way2sms.send(cookie, shruti, 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
-//await way2sms.send(cookie, varsha, 'Hey this is tiger auth messaging you!! All the best for SIH .You guys rock!! -To team and team leader Mihir');
 } catch (error) {
   console.log(error);
   console.log(JSON.stringify(error))
@@ -110,6 +102,26 @@ return res.status(200).send({
   otp
 });
 
-})
+});
+
+computeAndStoreHash = (username) => {
+ 
+  let dir = path.join(__dirname ,`../../biometrics/${username}`);
+const options = {
+    folders: { include: dir} ,
+    matchBaseName: true
+};
+ 
+console.log('Creating a hash over the current folder:');
+hashElement(dir, options)
+    .then(hash => {
+        console.log(hash.toString());
+    })
+    .catch(error => {
+        return console.error('hashing failed:', error);
+    });
+    
+}
+
 
 module.exports = router;
