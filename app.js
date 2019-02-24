@@ -29,9 +29,9 @@ app.get('/', (req,res)=>{
 });
 
 const register = require('./routes/register/register');
-const login = require('./routes/login');
+const check = require('./routes/login/check');
 app.use('/register',register);
-app.use('/login',login);
+app.use('/check',check);
 
 app.post('/audio', (req,res)=>{
   const data = req.body;
