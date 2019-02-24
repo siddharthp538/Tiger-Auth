@@ -47,19 +47,11 @@ function face_store(user, data){
 
 function voice_store(user, voice){
   const voice_name =  'voice_'+user.username +  ".wav";
-  
-  user.audio =path.join(__dirname,`../../biometrics/${user.username}/`) +  voice_name;
-  fs.writeFileSync(user.audio, voice, (err, voice)=>{
-    if(err){
-      console.log('Audio not stored!');
-      throw Error('Audio could not be stored!');
-    }
-    else{
-      console.log('Audio is getting stored!');
-    }
-  });
+  var temp_data = voice.replace(/^data:audio\/wav;base64,/, "");
+  let buff = new Buffer(temp_data, 'base64'); 
+  user.audio = path.join(__dirname,`../../biometrics/${user.username}/`) +  voice_name;
+  fs.writeFileSync(user.audio,buff);
   return user;
-
 }
 
 
