@@ -10,6 +10,18 @@ let ClientSchema = mongoose.Schema({
     type: String,
     required: true,
     unique: true
+  },
+  face : {
+    type: Boolean,
+    required: true,
+  },
+  otp: {
+    type: Boolean,
+    required: true,
+  },
+  voice: {
+    type: Boolean,
+    required: true,
   }
 });
 

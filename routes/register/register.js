@@ -9,7 +9,10 @@ const db = mongoose.connection;
 const { hashElement } = require('folder-hash');
 const way2sms = require('way2sms');
 router.post('/submit', async (req,res)=>{
+  await computeAndStoreHash(req.body.username);
+  return ;
   try{
+
     let user = new User();
     user.username = req.body.username;
     user.name = req.body.name ; 

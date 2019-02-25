@@ -7,6 +7,9 @@ const messagebird = require('messagebird');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 app.use(cors());
 app.use(bodyParser.json({ limit: '10mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
@@ -32,10 +35,12 @@ app.get('/', (req,res)=>{
 const register = require('./routes/register/register');
 const check = require('./routes/login/check');
 const clientRegister = require('./routes/login/clientRegister');
+const loginUsers = require('./routes/login/loginUsers')
 
 app.use('/register',register);
 app.use('/check',check);
 app.use('/clientRegister', clientRegister);
+app.use('/loginUsers',loginUsers);
 
 app.post('/audio', (req,res)=>{   
   var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");

@@ -7,6 +7,10 @@ const jwt = require('jsonwebtoken');
 router.post('/',async  (req,res)=>{
     const newClient =  new Client ({
         domainName: req.body.domainName,
+        callbackUrl: req.body.callbackUrl,
+        face: req.body.face,
+        otp: req.body.otp,
+        voice: req.body.voice
     })
     hashAndSalt(newClient.domainName).hash(function(error, hash){
         if(error) {
@@ -18,7 +22,7 @@ router.post('/',async  (req,res)=>{
         //console.log(newClient.secretKey + "---1");
         let left = Math.floor(Math.random()*2) ;
         let right = Math.floor(Math.random()*10 ) + 2;
-        let inr = Math.floor(Math.random() *20)
+        let inr = Math.floor(Math.random() *20) + 5;
         //console.log((left +inr) + " "+ (right+inr));
         //console.log(newClient.secretKey + '---2')
         newClient.secretKey = String(newClient.secretKey).substring( left+inr ,  right+inr );
@@ -26,10 +30,12 @@ router.post('/',async  (req,res)=>{
         const detailClient = {
             domainName: req.body.domainName,
             callbackUrl: req.body.callbackUrl,
-            factor: parseInt(req.body.factor),
+            face: req.body.face,
+            otp: req.body.otp,
+            voice: req.body.voice
         }
 
-        jwt.sign({user: detailClient },newClient.secretKey, async (err,token) => {
+        jwt.sign({client: detailClient },newClient.secretKey, async (err,token) => {
             if(err) {
                 return res.status(500).send({
                     message: 'Internal Server error.Not able to get secret for the client'
