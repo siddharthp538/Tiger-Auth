@@ -7,24 +7,26 @@ const messagebird = require('messagebird');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+
+
 app.use(cors());
 app.use(bodyParser.json({ limit: '10mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 
 app.use (express.static(path.join(__dirname,'biometrics')));
 const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
-mongoose.connect(mongoURI,{
-  useNewUrlParser: true 
-})
-.then(() => {
-   console.log('MongoDB connected..');
-})
-.catch(err => {
-   console.log(err);
-});
+// mongoose.connect(mongoURI,{
+//   useNewUrlParser: true 
+// })
+// .then(() => {
+//    console.log('MongoDB connected..');
+// })
+// .catch(err => {
+//    console.log(err);
+// });
 
 
-var db = mongoose.connection;
+
 app.get('/', (req,res)=>{
   res.send('Welcome to TigerAuth!');
 });
@@ -49,7 +51,7 @@ app.post('/video', (req,res)=>{
   var temp_data = req.body.video.replace(/^data:video\/webm;base64,/, "");
   const blinks_done = req.body.blinks;
   let buff = new Buffer(temp_data, 'base64');
-  fs.writeFileSync('./lavina1.webm', buff);
+  fs.writeFileSync('./check.mp4', buff);
   res.send('Done!');
 });
 
