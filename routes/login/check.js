@@ -4,6 +4,9 @@ const router = express.Router();
 const User = require('../../models/user');
 const fs = require('fs');
 var ps = require('python-shell');
+const request = require('request');
+let facepath1;
+let facepath2;
 
 router.post('/username', async (req, res) => {
   console.log(req.body);
@@ -31,18 +34,39 @@ router.post('/videoAndBlinks', async (req, res) => {
   let confidence = 0;
   const options = {
     args:
-    [
-      dir
-    ]
+      [
+        dir
+      ]
   };
-  await ps.PythonShell.run(dir1, options, function (err, data) {
+  await ps.PythonShell.run(dir1, options, async function (err, data) {
     if (err) res.send(err);
-    data = String(data);
-    data = data.substring(1,data.length-1);
-    const newData = data.split(',');
     fs.unlinkSync(dir);
-    res.send(newData[1]);
-  });   
+    const img_received = path.join(__dirname, '../../a.png');
+    console.log(img_received);
+    facepath1 = img_received;
+    facepath2 = img_stored;
+    console.log(img_stored);
+    console.log('no of blinks: ' + data[0]);
+    if (data[0] == req.body.blinks) {
+      const p = path.join(__dirname, '../../python/face_recognise.py');
+      const o = {
+        args:
+          [
+            img_received,
+            img_stored
+          ]
+      };
+      await ps.PythonShell.run(p, o, (err,data)=>{
+        if(err) res.send(err);
+        console.log(data.toString());
+        res.send(data.toString());
+        
+      });
+    }
+    else {
+      res.send("INVALID");
+    }
+  });
 
   // const spawn = await require("child_process").spawn;
   // const process = await spawn('python', ["/home/siddharthp538/Tiger-Auth/python/detect_blink_sih.py"]);
@@ -71,4 +95,10 @@ router.post('/voice', async (req, res) => {
   console.log('end');
 });
 
-module.exports = router;
+
+
+module.exports = {
+  router,
+  facepath1,
+  facepath2
+};

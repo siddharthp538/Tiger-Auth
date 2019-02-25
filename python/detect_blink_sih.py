@@ -5,7 +5,8 @@ from scipy.spatial import distance as dist
 from PIL import Image
 import dlib
 import sys 
-import json
+import os
+
 
 
 def eye_aspect_ratio(eye):
@@ -40,9 +41,10 @@ def count_blinks(video):
     FIRST = 0
 
 #    print("[INFO] loading facial landmark predictor...")
-    detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor('/home/siddharthp538/Tiger-Auth/python/shape_predictor_68_face_landmarks.dat')
-
+    detector = dlib.get_frontal_face_detector()  
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    predictor = dlib.shape_predictor(dir_path+'/shape_predictor_68_face_landmarks.dat')
+    
     stream = cv2.VideoCapture(video)
     #fps = FPS().start()
     #time.sleep(1.0)
@@ -55,7 +57,8 @@ def count_blinks(video):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         if FIRST == 0:
-            img = Image.fromarray(frame, 'RGB')
+            #img = Image.fromarray(frame, 'RGB')
+            img = frame
             #img.show()
             FIRST = 1
 
@@ -74,10 +77,10 @@ def count_blinks(video):
             # get the right eye landmarks
             right_eye = landmarks[RIGHT_EYE_POINTS]
             # draw contours on the eyes
-            left_eye_hull = cv2.convexHull(left_eye)
-            right_eye_hull = cv2.convexHull(right_eye)
-            cv2.drawContours(frame, [left_eye_hull], -1, (0, 255, 0), 1) # (image, [contour], all_contours, color, thickness)
-            cv2.drawContours(frame, [right_eye_hull], -1, (0, 255, 0), 1)
+            #left_eye_hull = cv2.convexHull(left_eye)
+            #right_eye_hull = cv2.convexHull(right_eye)
+            #cv2.drawContours(frame, [left_eye_hull], -1, (0, 255, 0), 1) # (image, [contour], all_contours, color, thickness)
+            #cv2.drawContours(frame, [right_eye_hull], -1, (0, 255, 0), 1)
             # compute the EAR for the left eye
             ear_left = eye_aspect_ratio(left_eye)
             # compute the EAR for the right eye
@@ -92,24 +95,26 @@ def count_blinks(video):
             else:
                 if COUNTER >= EYE_AR_CONSEC_FRAMES:
                     TOTAL += 1
-                    print("Eye Blinked")
+                    #print("Eye Blinked")
                 COUNTER = 0
 
     stream.release()
+    cv2.imwrite('a.png',img)
+
     #imgdesc = open(img, 'rb')
     #results = {
     #    'blinks': TOTAL,
     #    'media' : img
     #}
-    results = {
-        "blinks": TOTAL,
-        "img": img
-    }
-    return [TOTAL, img]
+    return TOTAL
+    
 path = sys.argv[1]
-list   = count_blinks(path)
-print(list)
-sys.stdout.flush()
+#print(path)
+print(count_blinks(path))
+
+#list   = count_blinks(path)
+
+
 #stream = cv2.VideoCapture('/media/shruti/DATA/noderest/blink-detection/2019-02-20-130516.mp4')
 #print(type(stream))
 #desc = count_blinks(stream)

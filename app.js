@@ -15,15 +15,15 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 
 app.use (express.static(path.join(__dirname,'biometrics')));
 const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
-// mongoose.connect(mongoURI,{
-//   useNewUrlParser: true 
-// })
-// .then(() => {
-//    console.log('MongoDB connected..');
-// })
-// .catch(err => {
-//    console.log(err);
-// });
+mongoose.connect(mongoURI,{
+  useNewUrlParser: true 
+})
+.then(() => {
+   console.log('MongoDB connected..');
+})
+.catch(err => {
+   console.log(err);
+});
 
 
 
@@ -32,7 +32,7 @@ app.get('/', (req,res)=>{
 });
 
 const register = require('./routes/register/register');
-const check = require('./routes/login/check');
+const check = require('./routes/login/check').router;
 const clientRegister = require('./routes/login/clientRegister');
 
 app.use('/register',register);
