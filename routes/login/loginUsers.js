@@ -41,7 +41,7 @@ const tokenVerification = (token)=> {
     if(!token)
         return false;
    
-    return jwt.verify(token, 'bkdf2$1' , (err, authData) => {
+    return jwt.verify(token, 'TigerAuth' , (err, authData) => {
         if(err) {
             return false;
         } else {
@@ -69,9 +69,44 @@ const getClientTokenDetail = async(token, domainName) => {
         }
     })
 }
-router.get('/' , async (req,res) => {
+
+
+function verifyToken(req, res, next) {
+    // Get auth header value
+    console.log(req.headers);
+    const bearerHeader = req.headers['authorization'];
+    // Check if bearer is undefined
+    if(typeof bearerHeader !== 'undefined') {
+      // Split at the space
+      const bearer = bearerHeader.split(' ');
+      // Get token from array
+      const bearerToken = bearer[1];
+      // Set the token
+      req.token = bearerToken;
+      // Next middleware
+      next();
+    } else {
+      // Forbidden
+      res.sendStatus(403);
+    }
+  
+  }
+
+
+
+router.get('/:domainName' , async (req, res) => {
+    if ( req.cookies.TigerAuth)
+    {
+        res.redirect('https://www.google.com/');
+    } else {
+        res.redirect('https://www.hackerrank.com/')
+    }
+})
+
+router.post('/' , verifyToken, async (req,res) => {
 
     const cookieArray = req.cookies.TigerAuth;
+    console.log(cookieArray)
     let usersData = [];
     const clientData = await getClientTokenDetail(req.token, req.body.domainName);
 
@@ -80,9 +115,6 @@ router.get('/' , async (req,res) => {
         let userObject =  cookieArray [itr];
         let dataObject= {};
         let facetoken = userObject.faceToken;
-        console.log(facetoken);
-        console.log(tokenVerification(facetoken))
-        let result ;
        
         dataObject.faceTokenCheck =   await tokenVerification(userObject.faceToken);
         dataObject.otpTokenCheck =  await tokenVerification(userObject.otpToken);
