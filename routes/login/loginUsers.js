@@ -95,8 +95,7 @@ function verifyToken(req, res, next) {
 
 
 router.get('/:domainName' , async (req, res) => {
-    if ( req.cookies.TigerAuth)
-    {
+    if ( req.cookies.TigerAuth) {
         res.redirect('https://www.google.com/');
     } else {
         res.redirect('https://www.hackerrank.com/')
@@ -104,27 +103,43 @@ router.get('/:domainName' , async (req, res) => {
 })
 
 router.post('/' , verifyToken, async (req,res) => {
+    try { 
+        if(!req.token) {
+            res.status(400).send({
+                message: 'secret for client not found'
+            })
+        }
+        if(!req.body.domainName) {
+            res.status(400).send({
+                message: 'domainName of client required'
+            })
+        }
+        const cookieArray = req.cookies.TigerAuth;
+        console.log(cookieArray)
+        let usersData = [];
+        const clientData = await getClientTokenDetail(req.token, req.body.domainName);
 
-    const cookieArray = req.cookies.TigerAuth;
-    console.log(cookieArray)
-    let usersData = [];
-    const clientData = await getClientTokenDetail(req.token, req.body.domainName);
-
-    for (var itr = 0 ; itr < cookieArray.length ; itr ++)
-    {
-        let userObject =  cookieArray [itr];
-        let dataObject= {};
-        let facetoken = userObject.faceToken;
-       
-        dataObject.faceTokenCheck =   await tokenVerification(userObject.faceToken);
-        dataObject.otpTokenCheck =  await tokenVerification(userObject.otpToken);
-        dataObject.voiceTokenCheck = await tokenVerification(userObject.voiceToken);
-        dataObject.username = userObject.username;
-        usersData.push(dataObject)
+        for (var itr = 0 ; itr < cookieArray.length ; itr ++)
+        {
+            let userObject =  cookieArray [itr];
+            let dataObject= {};
+            let facetoken = userObject.faceToken;
+        
+            dataObject.faceTokenCheck =   await tokenVerification(userObject.faceToken);
+            dataObject.otpTokenCheck =  await tokenVerification(userObject.otpToken);
+            dataObject.voiceTokenCheck = await tokenVerification(userObject.voiceToken);
+            dataObject.username = userObject.username;
+            usersData.push(dataObject)
 
 
+        }
+        res.send({ usersData , clientData });
+    } catch(err) {
+        res.status(400).send({
+            err
+        })
     }
-    res.send({ usersData , clientData });
     
 })
+
 module.exports = router;

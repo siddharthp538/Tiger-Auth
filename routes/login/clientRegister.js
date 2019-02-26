@@ -10,7 +10,15 @@ router.post('/',async  (req,res)=>{
         callbackUrl: req.body.callbackUrl,
         face: req.body.face,
         otp: req.body.otp,
-        voice: req.body.voice
+        voice: req.body.voice,
+        permissions: {
+            name: req.body.permissions.name,
+            username: req.body.permissions.username,
+            phone: req.body.permissions.phone,
+            dob: req.body.permissions.dob,
+            img: req.body.permissions.img,
+            audio: req.body.permissions.audio
+        },
     })
     hashAndSalt(newClient.domainName).hash(function(error, hash){
         if(error) {
@@ -32,7 +40,15 @@ router.post('/',async  (req,res)=>{
             callbackUrl: req.body.callbackUrl,
             face: req.body.face,
             otp: req.body.otp,
-            voice: req.body.voice
+            voice: req.body.voice,
+            permissions: {
+                name: req.body.permissions.name,
+                username: req.body.permissions.username,
+                phone: req.body.permissions.phone,
+                dob: req.body.permissions.dob,
+                img: req.body.permissions.img,
+                audio: req.body.permissions.audio
+            },
         }
 
         jwt.sign({client: detailClient },newClient.secretKey, async (err,token) => {

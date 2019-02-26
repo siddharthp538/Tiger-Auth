@@ -22,6 +22,39 @@ let ClientSchema = mongoose.Schema({
   voice: {
     type: Boolean,
     required: true,
+  },
+  permissions: {
+    name: {
+      type: Boolean ,
+      required: true,
+      default: false 
+    },
+    username: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    phone: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    dob: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    img: {
+      type:Boolean,
+      required: true,
+      default: false
+    },
+    audio: {
+      type: Boolean,
+      required: true,
+      default: false
+    }
+
   }
 });
 

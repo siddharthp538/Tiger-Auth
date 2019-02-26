@@ -35,12 +35,15 @@ app.get('/', (req,res)=>{
 const register = require('./routes/register/register');
 const check = require('./routes/login/check');
 const clientRegister = require('./routes/login/clientRegister');
-const loginUsers = require('./routes/login/loginUsers')
+const loginUsers = require('./routes/login/loginUsers');
+const login = require('./routes/login/login');
+
 
 app.use('/register',register);
 app.use('/check',check);
 app.use('/clientRegister', clientRegister);
 app.use('/loginUsers',loginUsers);
+app.use('/login',login);
 
 app.post('/audio', (req,res)=>{   
   var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");
