@@ -37,7 +37,9 @@ const check = require('./routes/login/check');
 const clientRegister = require('./routes/login/clientRegister');
 const loginUsers = require('./routes/login/loginUsers');
 const login = require('./routes/login/login');
-const resource = require('./routes/login/resource')
+const resource = require('./routes/login/resource');
+const logout = require('./routes/logout/logout');
+
 
 app.use('/register',register);
 app.use('/check',check);
@@ -45,6 +47,7 @@ app.use('/clientRegister', clientRegister);
 app.use('/loginUsers',loginUsers);
 app.use('/login',login);
 app.use('/login/resource', resource);
+app.use('/logout',logout);
 
 app.post('/audio', (req,res)=>{   
   var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");

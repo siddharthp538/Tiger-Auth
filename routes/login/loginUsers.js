@@ -28,7 +28,7 @@ let TigerAuth  = [
 ];
 router.get('/setcookie' , (req,res) => {
 
-    res.clearCookie('TigerAuth');
+    //res.clearCookie("TigerAuth")
     res.cookie("TigerAuth" ,TigerAuth);
     res.send("user data added to the cookie");
 });
