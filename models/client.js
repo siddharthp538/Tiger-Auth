@@ -32,7 +32,7 @@ let ClientSchema = mongoose.Schema({
     username: {
       type: Boolean,
       required: true,
-      default: false
+      default: true,
     },
     phone: {
       type: Boolean,

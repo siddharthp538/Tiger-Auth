@@ -3,8 +3,13 @@ const router = express.Router();
 const Client = require('../../models/client');
 const hashAndSalt = require('password-hash-and-salt');
 const jwt = require('jsonwebtoken');
+const http = require('http');
+const url = require('url');
+const fs = require('fs');
+var lzString = require("lz-string")
 
 router.post('/',async  (req,res)=>{
+
     const newClient =  new Client ({
         domainName: req.body.domainName,
         callbackUrl: req.body.callbackUrl,
@@ -59,11 +64,16 @@ router.post('/',async  (req,res)=>{
             }
             //console.log('token =' + token);
             await newClient.save();
-            return res.status(200).send({
-                secret:token,
-                key: newClient.secretKey
+            console.log(token)
+            res.setHeader('Content-disposition', 'attachment; filename=theDocument.txt');
+            res.setHeader('Content-type', 'text/plain');
+            res.end(token);
+          
+            // return res.status(200).send({
+            //     secret:token,
+            //     key: newClient.secretKey
                 
-            })
+            // })
             
         });
     });
