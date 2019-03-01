@@ -312,9 +312,11 @@ router.post('/', async (req,res) => {
                     const newAccessKey = new  AccessKey({
                         accessToken: token
                     });
+                    console.log(newAccessKey)
                     const dbResponse = await newAccessKey.save();
+                    console.log(dbResponse)
                     res.status(200).send({
-                        link: `http://${clientData.callbackUrl}/${dbResponse._id}`,
+                        link: `https://${clientData.callbackUrl}/${dbResponse._id}`,
                         response: {
                             faceRequiredByClient: false,
                             voiceRequiredByClient: false,

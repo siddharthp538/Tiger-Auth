@@ -314,7 +314,7 @@ router.get('/:domainName/:type' , verifyToken,  async (req, res) => {
         const newKey = new Key ({token: req.token});
         const dbResponse = await newKey.save();
         console.log(dbResponse + " ======0")
-        const link =  `http://${ip}:4200/transition/` + domainName+ "/" + String(dbResponse._id)+ "/" + type  ;
+        const link =  `https://${ip}:4200/transition/` + domainName+ "/" + String(dbResponse._id)+ "/" + type  ;
             console.log(link+" ===2")
             res.json({link : link});
 
