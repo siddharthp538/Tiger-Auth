@@ -7,13 +7,20 @@ const messagebird = require('messagebird');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const ffmpeg = require('fluent-ffmpeg');
+const Activity = require('./models/activity');
+const https = require('https');
 
+let options = {
+  key : fs.readFileSync('./server.key'),
+  cert : fs.readFileSync('./server.crt')
+}
 
 app.use(cors());
-app.use(bodyParser.json({ limit: '10mb', extended: true }))
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
-
+app.use(bodyParser.json({ limit: '100mb', extended: true }))
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use (express.static(path.join(__dirname,'biometrics')));
+
 const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
 mongoose.connect(mongoURI,{
   useNewUrlParser: true 
@@ -46,7 +53,7 @@ app.post('/audio', (req,res)=>{
   res.send('Done!');
 });
 
-app.post('/video', (req,res)=>{
+app.post('/video', (req,res)=>{ 
   console.log(req.body);
   var temp_data = req.body.video.replace(/^data:video\/webm;base64,/, "");
   const blinks_done = req.body.blinks;
@@ -55,6 +62,21 @@ app.post('/video', (req,res)=>{
   res.send('Done!');
 });
 
-app.listen(3000, ()=>{
+app.post('/user/activity',async (req,res) => {
+  try { 
+  const username = req.body.username;
+  const ans = await  Activity.findOne({username: req.body.username})
+  console.log(ans);
+  res.send(ans);
+  } catch(err) {
+    res.status(400).send({
+      message: err
+    });
+  }
+  
+});
+
+
+https.createServer(options, app).listen(3000, ()=>{
   console.log('Server running on 3000....');
 });

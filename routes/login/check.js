@@ -1,25 +1,32 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const User = require('../../models/user');
+const User1 = require('../../models/user1');
 const fs = require('fs');
 var ps = require('python-shell');
 const request = require('request');
+const ffmpeg = require('fluent-ffmpeg');
+const way2sms = require('way2sms');
+
+
 let facepath1;
 let facepath2;
 
 router.post('/username', async (req, res) => {
   console.log(req.body);
-  if (await User.findOne({ username: req.body.username })) {
+  if (await User1.findOne({ username: req.body.username })) {
     console.log('i am here!');
-    res.send('Valid');
+    res.status(200).send({
+      message : "valid"
+    });
   } else {
     console.log('wrong username!');
     return res.status(200).send({
       message: 'Wrong Username! Are you a registered user?'
-    });
+    }); 
   }
 });
+
 router.post('/videoAndBlinks', async (req, res) => {
   const username = req.body.username;
   const blinks = req.body.blinks;
@@ -31,7 +38,7 @@ router.post('/videoAndBlinks', async (req, res) => {
   await fs.writeFileSync(dir, buff);
   console.log(dir);
   console.log(dir1);
-  let confidence = 0;
+  let confidence = 0; 
   const options = {
     args:
       [
@@ -47,6 +54,7 @@ router.post('/videoAndBlinks', async (req, res) => {
     facepath2 = img_stored;
     console.log(img_stored);
     console.log('no of blinks: ' + data[0]);
+    console.log('req blinks: ' + req.body.blinks);
     if (data[0] == req.body.blinks) {
       const p = path.join(__dirname, '../../python/face_recognise.py');
       const o = {
@@ -56,45 +64,77 @@ router.post('/videoAndBlinks', async (req, res) => {
             img_stored
           ]
       };
-      await ps.PythonShell.run(p, o, (err,data)=>{
-        if(err) res.send(err);
+      await ps.PythonShell.run(p, o, (err, data) => {
+        if (err) res.send(err);
         console.log(data.toString());
-        res.send(data.toString());
-        
+        res.send({
+          message: 'valid'
+        });
+
       });
     }
     else {
-      res.send("INVALID");
+      res.send("FALSE");
     }
   });
-
-  // const spawn = await require("child_process").spawn;
-  // const process = await spawn('python', ["/home/siddharthp538/Tiger-Auth/python/detect_blink_sih.py"]);
-  // process.stdout.on('data', (data) => {
-  //   console.log('inside');
-  //   //fs.unlinkSync(dir);
-  //   res.send(data.toString());
-  // });
 });
 
 router.post('/voice', async (req, res) => {
-  console.log('reached voice api!');
-  const username = req.body.username;
-  const img_stored = path.join(__dirname, `../../biometrics/${username}/voice_${username}.wav`);
-  let audio = req.body.audio.replace(/^data:audio\/wav;base64,/, "");
-  let buff = new Buffer(audio, 'base64');
-  // check if two faces are same! 
-  console.log(img_stored);
-  let confidence = 0;
-  const spawn = require("child_process").spawn;
-  const process = spawn('python', ["./run.py", 2, 4]);
-  process.stdout.on('data', (data) => {
-    console.log('python running!');
-    res.send(data);
-  });
-  console.log('end');
+    const pathToPython = path.join(__dirname, '../../python/test.py');
+    const arg1 = path.join(__dirname, `../../biometrics/${req.body.username}/voice/`);
+    var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");
+    let buff = new Buffer(temp_data, 'base64');  
+    const dir = path.join(__dirname, '../../a.wav');
+  
+    console.log(dir);
+    await fs.writeFileSync(dir, buff);
+    const arg2 = path.join(__dirname,`../../biometrics/${req.body.username}/voice/voice.gmm`);
+    const options = {
+      args : [
+        dir,
+        arg2
+      ]
+    }
+    await ps.PythonShell.run(pathToPython, options, (err, ans) => {
+      if(err) res.send(err);
+      else res.send({
+        message: 'valid'
+      });
+    });
 });
 
+router.post('/verifyOTP', async (req, res) => {
+  try{
+    console.log('i am in verifyOTP');
+    console.log(req.body)
+    const user = req.body.username;
+    cookie = await way2sms.login('9773160417', 'Sagarika@123'); // reLogin
+    // if( await User1.findOne({username : user}, (err,user)=>{
+        
+    // }))
+  
+    const dbResponse = await User1.findOne({ username: user});
+    console.log(dbResponse);
+    if(!dbResponse) {
+      console.log('error: user not found');
+      res.status(400).send({
+        message: 'user not found'
+      })
+    } 
+    console.log('collection found out');
+    const num = dbResponse.phone;
+    console.log('phone: ' + num);
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    console.log(otp);
+    res.send({
+      message: otp
+    });
+  }
+  catch(err){
+    throw err;
+  }
+ 
+});
 
 
 module.exports = {

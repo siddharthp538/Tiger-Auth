@@ -12,6 +12,7 @@
     "axios": "^0.18.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "fluent-ffmpeg": "^2.1.2",
     "folder-hash": "^2.1.2",
     "fs": "0.0.1-security",
     "jsonwebtoken": "^8.5.0",

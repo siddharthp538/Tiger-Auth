@@ -1,0 +1,5 @@
+g/home/siddharthp538/Tiger-Auth/biometrics/varshak333/voice/voice_1_varshak333.wav
+/home/siddharthp538/Tiger-Auth/biometrics/varshak333/voice/voice_2_varshak333.wav
+/home/siddharthp538/Tiger-Auth/biometrics/varshak333/voice/voice_3_varshak333.wav
+/home/siddharthp538/Tiger-Auth/biometrics/varshak333/voice/voice_4_varshak333.wav
+/home/siddharthp538/Tiger-Auth/biometrics/varshak333/voice/voice_5_varshak333.wav

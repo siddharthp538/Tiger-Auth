@@ -1,0 +1,5 @@
+/home/siddharthp538/Tiger-Auth/biometrics/mihirtiger/voice/voice_1_mihirtiger.wav
+/home/siddharthp538/Tiger-Auth/biometrics/mihirtiger/voice/voice_2_mihirtiger.wav
+/home/siddharthp538/Tiger-Auth/biometrics/mihirtiger/voice/voice_3_mihirtiger.wav
+/home/siddharthp538/Tiger-Auth/biometrics/mihirtiger/voice/voice_4_mihirtiger.wav
+/home/siddharthp538/Tiger-Auth/biometrics/mihirtiger/voice/voice_5_mihirtiger.wav
