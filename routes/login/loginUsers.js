@@ -37,14 +37,14 @@ router.get('/cookie' , (request, response) => {
 })
 let TigerAuth  = [
     {
-        faceToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic2lkZGhhcnRocDUzOCIsImZhY2UiOiJiaW9tZXRyaWNzL3NpZGRoYXJ0aHA1MzgvZmFjZV9zaWRkaGFydGhwNTM4LnBuZyIsImhhc2giOiJvbjFlT1BVZlRKdWdXcUxaS0tmTzBia0wvYm89In0sImlhdCI6MTU1MTA4NzM0NX0.4NW_O276KSMgLgu3uPt00btS8zy0TTMRcHTPpY6ADaA",
+        faceToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic2lkZGhhcnRocDUzOCIsImZhY2UiOiJiaW9tZXRyaWNzL3NpZGRoYXJ0aHA1MzgvZmFjZV9zaWRkaGFydGhwNTM4LnBuZyIsImhhc2giOiJvbjFlT1BVZlRKdWdXcUxaS0tmTzBia0wvYm89In0sImlhdCI6MTU1MTQ2OTQyNH0.gd5ElARk6Y4MyBMPc1ZOhbbm7sP1Y1cPESNFJeUxF-8",
 	 
 	 
-        voiceToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic2lkZGhhcnRocDUzOCIsImZhY2UiOiJiaW9tZXRyaWNzL3NpZGRoYXJ0aHA1MzgvZmFjZV9zaWRkaGFydGhwNTM4LnBuZyIsImhhc2giOiJvbjFlT1BVZlRKdWdXcUxaS0tmTzBia0wvYm89In0sImlhdCI6MTU1MTA5MjkyNn0.5NmmXxYgd0LrOlcHBmLjHI34JgfI8Ph_c82vqx5BFQM",
+        voiceToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic2lkZGhhcnRocDUzOCIsInZvaWNlIjoiYmlvbWV0cmljcy9zaWRkaGFydGhwNTM4L3ZvaWNlL3ZvaWNlXzFfc2lkZGhhcnRocDUzOC53YXYiLCJoYXNoIjoidDl6T3puKzZyN3FBR2t5clR2UTRaRURZdmtJPSwifSwiaWF0IjoxNTUxNDY5NjM0fQ.zLBfz8r5UlWTZh2u_XMln-_-jrkxxkcGjSw61lDvX9I",
         
         
         
-        otpToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic2lkZGhhcnRocDUzOCIsImZhY2UiOiJiaW9tZXRyaWNzL3NpZGRoYXJ0aHA1MzgvZmFjZV9zaWRkaGFydGhwNTM4LnBuZyIsImhhc2giOiJvbjFlT1BVZlRKdWdXcUxaS0tmTzBia0wvYm89In0sImlhdCI6MTU1MTA5MzEwOH0.Cmc4TxKiHb0kzzTXwEKo4YQKhe1nOt2XNaqrcSWoHlA",
+        otpToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic2lkZGhhcnRocDUzOCIsIm90cCI6ImJpb21ldHJpY3Mvc2lkZGhhcnRocDUzOC9vdHAvb3RwX3NpZGRoYXJ0aHA1MzgudHh0IiwiaGFzaCI6Ik1yMndDdVExcWdIUmtGMHRpWEJtdU0rVWlEOD0sIn0sImlhdCI6MTU1MTQ2OTc0Mn0.EN6QGAg9ykPFeltdrePualyXEXJdTg-nrN18B_tXzmw",
 
         username: "siddharthp538"
     },

@@ -16,7 +16,7 @@ party applications
 */
 router.post('/', (req,res) => {
     const username = req.body.username;
-    const cookieArray = req.cookies.TigerAuth;
+    const cookieArray = req.body.TigerAuth;
     for (var itr =0 ; itr < cookieArray.length ; itr++) {
         const userObject = cookieArray[itr];
         if(userObject.username ===  username){
