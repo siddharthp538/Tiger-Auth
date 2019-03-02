@@ -8,6 +8,8 @@ const User = require('../../models/user');
 const hashAndSalt = require('password-hash-and-salt');
 const Key = require('../../models/key')
 const AccessKey = require('../../models/accessKey');
+const sessionstorage = require('sessionstorage')
+const unirest = require('unirest')
 
 function verifyToken(req, res, next) {
     // Get auth header value
@@ -185,6 +187,41 @@ router.post('/', verifyToken , async (req,res) => {
 
 
 */
+
+router.post('/tigerauth' , async(req,res) => {
+    if(!req.body.username) {
+        res.status(400).send({
+            message: 'username required'
+        })
+    }
+    if(!req.body.TigerAuth) {
+        res.status(400).send({
+            message: 'localstorage array required'
+        })
+    }
+    const cookieArray = req.body.TigerAuth;
+    for(var itr =0 ; itr < cookieArray.length ;itr++ ){
+        const userObject = cookieArray[itr];
+        const faceTokenCheck =   await tokenVerification(userObject.faceToken);
+        const otpTokenCheck =  await tokenVerification(userObject.otpToken);
+        const voiceTokenCheck = await tokenVerification(userObject.voiceToken);
+        if(userObject.username === req.body.username && faceTokenCheck && otpTokenCheck && voiceTokenCheck) {
+            const userData = User.findOne({ username : req.body.username})
+            sessionStorage.setItem('sessUser' , userData)
+            console.log(sessionStorage.getItem('sessUser'))
+            unirest.get(`https://${ip}:4200`).send().end(response =>{
+            console.log('getting');
+            res.redirect(`https://${ip}:4200/profile`);
+            
+        })
+        }
+
+    }
+    res.status(403).send({
+        message:'username not found in local storage'
+    })
+})
+
 
 router.post('/', async (req,res) => {
    

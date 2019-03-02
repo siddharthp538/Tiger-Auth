@@ -91,7 +91,7 @@ router.post('/' , verifyToken, async (req,res) => {
           const sessUser = user ;
           sessionstorage.setItem('sessUser', sessUser);
           console.log( ' username of tiger' + sessionstorage.getItem('sessUser'))
-          if(response.domainName === 'TigerAuth.com') {
+          if(response.domainName === 'www.TigerAuth.com') {
             unirest.get(`https://${ip}:4200`).send().end(response =>{
          console.log('getting');
          res.redirect(`https://${ip}:4200/dashboard`);
