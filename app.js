@@ -38,17 +38,7 @@ mongoose.connect(mongoURI,{
 });
 
 app.get('/', async (req,res)=>{
-  const bodyToSend = {
-    apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
-    secret: '0N05X4PUQ9WNSTWI',
-    usetype: 'stage',
-    phone: '8779059156',
-    message: 'hello',
-    senderid: 'varsha'
-  }
-  unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) =>{
-   console.log(bodyToSend)
- })
+ 
  res.send('hello')
 });
 

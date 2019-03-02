@@ -154,8 +154,7 @@ router.post('/videoAndBlinks', async (req, res) => {
               })
             }
           })
-        }
-        else{
+        } else{
           res.send('invalid');
         }
 
@@ -198,14 +197,68 @@ router.post('/voice', async (req, res) => {
             arg2
           ]
         }
-        await ps.PythonShell.run(pathToPython, options, (err, ans) => {
+        if(!req.body.TigerAuth){
+          res.status(400).send({
+            message: 'local storage array  is required'
+          })
+        } 
+        const cookieArray = req.body.TigerAuth
+        await ps.PythonShell.run(pathToPython, options, async(err, ans) => {
           if(err) res.send(err);
-          console.log(ans[0]+" " + ans[1]);
-          res.send(ans[1]);
+          if(ans[1]==='True'){
+            const hashResponse = await computeAndStoreHash(req.body.username);
+            const username = req.body.username;
+            const hash  = hashResponse.children[1].hash;
+            const user = {
+              username: username,
+              hash ,
+              voice: `${username}/voice/voice_1_${username}.wav`
+            }
+            jwt.sign({ user} , 'TigerAuth', (err,token) => {
+              if(err) {
+                res.status(400).send({
+                  message: 'token not created',
+                  TigerAuth: TigerAuth
+                }) 
+              } else {
+                console.log(token)
+                let found = false;
+                for (var itr = 0 ; itr< cookieArray.length ; itr ++){
+                  var userObject = cookieArray [itr];
+                  if (userObject.username === username) {
+                    console.log(userObject)
+                    found = true;
+                    userObject.voiceToken= token;
+                  }
+                  cookieArray[itr] = userObject;
+                  console.log('------' + cookieArray[itr])
+                }
+                if(!found){
+                  const newUserObject = {
+                    faceToken: '',
+                    username,
+                    otpToken: "",
+                    voiceToken: token
+                  }
+                  console.log(newUserObject)
+                  cookieArray.push(newUserObject)
+                }
+                res.status(200).send({
+                  message: 'valid',
+                  TigerAuth: cookieArray
+                })
+              }
+            })
+          } else{
+            res.status(400).send({
+              message: 'invalid',
+              TigerAuth: cookieArray
+            })
+          }
+  
           
         });
-      }
-      else{
+      } else{
         res.status(400).send({
           message: 'Mismatch in the given and received sentences!'
         });
