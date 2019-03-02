@@ -29,7 +29,7 @@ count = 1
 features = np.asarray(())
 for path in file_paths:    
     path = path.strip()   
-    print (path)
+    #print (path)
     
     # read the audio
     sr,audio = read(path)

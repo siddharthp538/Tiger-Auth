@@ -23,8 +23,8 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '100mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use (express.static(path.join(__dirname,'biometrics')));
-//const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
-const mongoURI = 'mongodb://localhost/sihtigerauth'
+const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
+//const mongoURI = 'mongodb://localhost/sihtigerauth'
 mongoose.connect(mongoURI,{
   useNewUrlParser: true 
 })
