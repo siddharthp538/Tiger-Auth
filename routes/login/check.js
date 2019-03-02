@@ -166,31 +166,38 @@ router.post('/videoAndBlinks', async (req, res) => {
 });
 
 router.post('/voice', async (req, res) => {
+    const pathToS2T = path.join(__dirname, '../../python/speech2text.py');
     const pathToPython = path.join(__dirname, '../../python/test.py');
     const arg1 = path.join(__dirname, `../../biometrics/${req.body.username}/voice/`);
     var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");
     let buff = new Buffer(temp_data, 'base64');  
     const dir = path.join(__dirname, '../../a.wav');
-  
+
     console.log(dir);
     await fs.writeFileSync(dir, buff);
-    const arg2 = path.join(__dirname,`../../biometrics/${req.body.username}/voice/voice.gmm`);
-    const options = {
+    let opt = {
       args : [
-        dir,
-        arg2
+        dir 
       ]
     }
-    await ps.PythonShell.run(pathToPython, options, (err, ans) => {
-      if(err) res.send(err);
-      console.log(ans.toString());
-      if(ans.toString() == 'True'){
-        
-      } else {
-      
+    await ps.PythonShell.run(pathToS2T, opt, async (err, data) => {
+      console.log('s2t says: ' + data.toString());
+      return; 
+      const arg2 = path.join(__dirname,`../../biometrics/${req.body.username}/voice/voice.gmm`);
+      const options = {
+        args : [
+          dir,
+          arg2
+        ]
       }
-    
-    });
+      await ps.PythonShell.run(pathToPython, options, (err, ans) => {
+        if(err) res.send(err);
+        else res.send({
+          message: 'valid'
+        });
+      });
+    })
+
 });
 
 router.post('/verifyOTP', async (req, res) => {
@@ -199,25 +206,22 @@ router.post('/verifyOTP', async (req, res) => {
     console.log(req.body)
     const user = req.body.username;
     cookie = await way2sms.login('8779059156', 'Sagarika@123'); // reLogin
-    // if( await User1.findOne({username : user}, (err,user)=>{
-        
-    // }))
-  
     const dbResponse = await User1.findOne({ username: user});
     console.log(dbResponse);
     if(!dbResponse) {
       console.log('error: user not found');
       res.status(400).send({
         message: 'user not found'
-      })
+      });
     } 
     console.log('collection found out');
     const num = dbResponse.phone;
     console.log('phone: ' + num);
     const otp = Math.floor(100000 + Math.random() * 900000);
     console.log(otp);
-    res.send({
-      message: otp
+    await way2sms.send(cookie,num,`Your One time Password is ${Math.floor(100000 + Math.random() * 900000)}`);   
+    return res.status(200).send({
+      message:otp
     });
   }
   catch(err){

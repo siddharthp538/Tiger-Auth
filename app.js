@@ -35,8 +35,6 @@ mongoose.connect(mongoURI,{
    console.log(err);
 });
 
-
-
 app.get('/', (req,res)=>{
   res.send('Welcome to TigerAuth!');
 });
