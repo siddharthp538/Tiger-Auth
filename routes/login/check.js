@@ -111,49 +111,54 @@ router.post('/videoAndBlinks', async (req, res) => {
       };
       await ps.PythonShell.run(p, o, async (err, data) => {
         if (err) res.send(err);
-        console.log(data.toString());
-        const hashResponse = await computeAndStoreHash(req.body.username);
-        const hash  = hashResponse.children[0].hash;
-        const user = {
-          username: username,
-          hash ,
-          face: `${username}/face_${username}.png`
-        }
-        jwt.sign({ user} , 'TigerAuth', (err,token) => {
-          if(err) {
-            res.status(400).send({
-              message: 'token not created',
-              TigerAuth: TigerAuth
-            }) 
-          } else {
-            console.log(token)
-            let found = false;
-            for (var itr = 0 ; itr< cookieArray.length ; itr ++){
-              var userObject = cookieArray [itr];
-              if (userObject.username === username) {
-                console.log(userObject)
-                found = true;
-                userObject.faceToken= token;
-              }
-              cookieArray[itr] = userObject;
-              console.log('------' + cookieArray[itr])
-            }
-            if(!found){
-              const newUserObject = {
-                faceToken: token,
-                username,
-                otpToken: "",
-                voiceToken: ""
-              }
-              console.log(newUserObject)
-              cookieArray.push(newUserObject)
-            }
-            res.status(200).send({
-              message: 'valid',
-              TigerAuth: cookieArray
-            })
+        if(data[0]==='[True]'){
+          const hashResponse = await computeAndStoreHash(req.body.username);
+          const hash  = hashResponse.children[0].hash;
+          const user = {
+            username: username,
+            hash ,
+            face: `${username}/face_${username}.png`
           }
-        })
+          jwt.sign({ user} , 'TigerAuth', (err,token) => {
+            if(err) {
+              res.status(400).send({
+                message: 'token not created',
+                TigerAuth: TigerAuth
+              }) 
+            } else {
+              console.log(token)
+              let found = false;
+              for (var itr = 0 ; itr< cookieArray.length ; itr ++){
+                var userObject = cookieArray [itr];
+                if (userObject.username === username) {
+                  console.log(userObject)
+                  found = true;
+                  userObject.faceToken= token;
+                }
+                cookieArray[itr] = userObject;
+                console.log('------' + cookieArray[itr])
+              }
+              if(!found){
+                const newUserObject = {
+                  faceToken: token,
+                  username,
+                  otpToken: "",
+                  voiceToken: ""
+                }
+                console.log(newUserObject)
+                cookieArray.push(newUserObject)
+              }
+              res.status(200).send({
+                message: 'valid',
+                TigerAuth: cookieArray
+              })
+            }
+          })
+        }
+        else{
+          res.send('invalid');
+        }
+
 
       });
     } else {
@@ -181,22 +186,32 @@ router.post('/voice', async (req, res) => {
       ]
     }
     await ps.PythonShell.run(pathToS2T, opt, async (err, data) => {
-      console.log('s2t says: ' + data.toString());
-      return; 
-      const arg2 = path.join(__dirname,`../../biometrics/${req.body.username}/voice/voice.gmm`);
-      const options = {
-        args : [
-          dir,
-          arg2
-        ]
-      }
-      await ps.PythonShell.run(pathToPython, options, (err, ans) => {
-        if(err) res.send(err);
-        else res.send({
-          message: 'valid'
+      console.log('s2t says: ' + data[0]);
+      const received_voice = req.body.text;
+      const s2t_voice = data[0];
+      let isEqual = received_voice.toLowerCase() === s2t_voice.toLowerCase();
+      if(isEqual){
+        const arg2 = path.join(__dirname,`../../biometrics/${req.body.username}/voice/voice.gmm`);
+        const options = {
+          args : [
+            dir,
+            arg2
+          ]
+        }
+        await ps.PythonShell.run(pathToPython, options, (err, ans) => {
+          if(err) res.send(err);
+          console.log(ans[0]+" " + ans[1]);
+          res.send(ans[1]);
+          
         });
-      });
-    })
+      }
+      else{
+        res.status(400).send({
+          message: 'Mismatch in the given and received sentences!'
+        });
+      }
+
+    });
 
 });
 
@@ -214,7 +229,6 @@ router.post('/verifyOTP', async (req, res) => {
         message: 'user not found'
       });
     } 
-    console.log('collection found out');
     const num = dbResponse.phone;
     console.log('phone: ' + num);
     const otp = Math.floor(100000 + Math.random() * 900000);
@@ -241,6 +255,7 @@ router.post('/verifyOTP', async (req, res) => {
 });
 
 router.post('/otpToken' , async (req,res) => {
+  console.log(req.body)
   const username = req.body.username ;
   if(!username) {
     res.status(400).send({

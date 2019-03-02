@@ -173,8 +173,6 @@ router.post('/verifyUsername', async (req, res) => {
 
 router.post('/verifyOTP', async (req, res) => {
 
-  
-
   const otp = Math.floor(100000 + Math.random() * 900000);
   console.log(otp)
   try {
