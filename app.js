@@ -23,17 +23,11 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '100mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use (express.static(path.join(__dirname,'biometrics')));
-<<<<<<< HEAD
-
-const mongoURI = '172.30.7.229/sihtigerauth';
-mongoose.connect(mongoURI,)
-=======
-//const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
-const mongoURI = 'mongodb://localhost/sihtigerauth'
+const mongoURI = 'mongodb://sihtigerauth:sihtigerauth2019@ds347665.mlab.com:47665/sihtigerauth'
+//const mongoURI = 'mongodb://localhost/sihtigerauth'
 mongoose.connect(mongoURI,{
   useNewUrlParser: true 
 })
->>>>>>> 10c049ce7d7a00dd84e637cc4ae6a373dbad53fd
 .then(() => {
    console.log('MongoDB connected..');
 })
