@@ -9,7 +9,7 @@ const { hashElement } = require('folder-hash');
 const way2sms = require('way2sms');
 const ps = require('python-shell');
 const jwt = require('jsonwebtoken');
-
+const unirest = require('unirest')
 let cnt = 1;
 router.get('/hash' , async(req,res) => {
   const hash = await computeAndStoreHash('siddharthp538');
@@ -173,25 +173,33 @@ router.post('/verifyUsername', async (req, res) => {
 
 router.post('/verifyOTP', async (req, res) => {
 
-  let cookie = await way2sms.login('8779059156', 'Sagarika@123'); // reLogin
-  console.log('1');
   const otp = Math.floor(100000 + Math.random() * 900000);
-  res.send({
-    message: otp
+  console.log(otp)
+  try {
+   
+    const bodyToSend = {
+      apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
+      secret: '0N05X4PUQ9WNSTWI',
+      usetype: 'stage',
+      phone: req.body.phone,
+      message: `Your One Time Password is ${otp}`,
+      senderid: 'varsha'
+    }
+    unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) =>{
+     console.log(bodyToSend)
+   })
+   return res.status(200).send({
+    message : otp
   });
-  // try {
-  //   console.log(req.body.phone);
-  //   await way2sms.send(cookie,req.body.phone, 'hello');
-  // } catch (error) {
-  //   console.log(error);
-  //   console.log(JSON.stringify(error))
-  //   return res.status(400).send({
-  //     message: 'Error in Sending OTP to the following number',
-  //   });
-  // } 
-  // return res.status(200).send({
-  //   message : otp
-  // });
+
+  } catch (error) {
+    console.log(error.message);
+    console.log(JSON.stringify(error))
+    return res.status(400).send({
+      message: error.message
+    });
+  } 
+  
 
 });
 

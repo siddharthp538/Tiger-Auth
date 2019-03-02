@@ -49,7 +49,7 @@ log_likelihood = 0
 gmm    = models  #checking with the model
 scores = np.array(gmm.score(vector))
 log_likelihood = scores.sum()
-print(log_likelihood)
+#print(log_likelihood)
 if log_likelihood >= -24.5:
 	print ("True")
 else:

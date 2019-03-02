@@ -9,6 +9,7 @@ const ffmpeg = require('fluent-ffmpeg');
 const way2sms = require('way2sms');
 const { hashElement } = require('folder-hash');
 const jwt = require('jsonwebtoken');
+const unirest = require('unirest');
 
 let facepath1;
 let facepath2;
@@ -233,9 +234,19 @@ router.post('/verifyOTP', async (req, res) => {
     console.log('phone: ' + num);
     const otp = Math.floor(100000 + Math.random() * 900000);
     console.log(otp);
-    await way2sms.send(cookie,num,`Your One time Password is ${Math.floor(100000 + Math.random() * 900000)}`);   
+    const bodyToSend = {
+      apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
+      secret: '0N05X4PUQ9WNSTWI',
+      usetype: 'stage',
+      phone: num,
+      message: `Your One Time Password is ${otp}`,
+      senderid: 'varsha'
+    }
+    await unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) =>{
+     console.log(bodyToSend)
+   })
     return res.status(200).send({
-      message:otp
+      message : otp
     });
   }
   catch(err){
@@ -245,7 +256,100 @@ router.post('/verifyOTP', async (req, res) => {
 });
 
 router.post('/otpToken' , async (req,res) => {
-  
+  const username = req.body.username ;
+  if(!username) {
+    res.status(400).send({
+      message: 'username required'
+    })
+  }
+  const cookieArray = req.body.TigerAuth;
+  if(!cookieArray) {
+    res.status(400).send({
+      message: 'local storage array required'
+    })
+  }
+  const hashResponse = await computeAndStoreHash(req.body.username);
+    const hash  = hashResponse.children[0].hash;
+    const user = {
+      username: username,
+      hash ,
+      face: `${username}/face_${username}.png`
+    }
+    jwt.sign({ user} , 'TigerAuth', (err,token) => {
+      if(err) {
+        res.status(400).send({
+          message: 'token not created',
+          TigerAuth: TigerAuth
+        }) 
+      } else {
+        console.log(token)
+        let found = false;const hash  = hashResponse.children[0].hash;
+    const user = {
+      username: username,
+      hash ,
+      face: `${username}/face_${username}.png`
+    }
+    jwt.sign({ user} , 'TigerAuth', (err,token) => {
+      if(err) {
+        res.status(400).send({
+          message: 'token not created',
+          TigerAuth: TigerAuth
+        }) 
+      } else {
+        console.log(token)
+        let found = false;
+        for (var itr = 0 ; itr< cookieArray.length ; itr ++){
+          var userObject = cookieArray [itr];
+          if (userObject.username === username) {
+            console.log(userObject)
+            found = true;
+            userObject.faceToken= token;
+          }
+          cookieArray[itr] = userObject;
+          console.log('------' + cookieArray[itr])
+        }
+        if(!found){
+          const newUserObject = {
+            faceToken: token,
+            username,
+            otpToken: "",
+            voiceToken: ""
+          }
+          console.log(newUserObject)
+          cookieArray.push(newUserObject)
+        }
+        res.status(200).send({
+          message: 'valid',
+          TigerAuth: cookieArray
+        })
+      }
+    })
+        for (var itr = 0 ; itr< cookieArray.length ; itr ++){
+          var userObject = cookieArray [itr];
+          if (userObject.username === username) {
+            console.log(userObject)
+            found = true;
+            userObject.faceToken= token;
+          }
+          cookieArray[itr] = userObject;
+          console.log('------' + cookieArray[itr])
+        }
+        if(!found){
+          const newUserObject = {
+            faceToken: token,
+            username,
+            otpToken: "",
+            voiceToken: ""
+          }
+          console.log(newUserObject)
+          cookieArray.push(newUserObject)
+        }
+        res.status(200).send({
+          message: 'valid',
+          TigerAuth: cookieArray
+        })
+      }
+    })
 })
 
 
