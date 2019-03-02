@@ -200,8 +200,10 @@ router.post('/voice', async (req, res) => {
         }
         await ps.PythonShell.run(pathToPython, options, (err, ans) => {
           if(err) res.send(err);
-          console.log(ans[0]+" " + ans[1]);
-          res.send(ans[1]);
+          console.log(ans);
+          res.status(200).send({
+            message : ans[1]
+          });
           
         });
       }
@@ -233,20 +235,20 @@ router.post('/verifyOTP', async (req, res) => {
     console.log('phone: ' + num);
     const otp = Math.floor(100000 + Math.random() * 900000);
     console.log(otp);
-    const bodyToSend = {
-      apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
-      secret: '0N05X4PUQ9WNSTWI',
-      usetype: 'stage',
-      phone: num,
-      message: `Your One Time Password is ${otp}`,
-      senderid: 'varsha'
-    }
-    await unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) =>{
-     console.log(bodyToSend)
-   })
-    return res.status(200).send({
-      message : otp
-    });
+  //   const bodyToSend = {
+  //     apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
+  //     secret: '0N05X4PUQ9WNSTWI',
+  //     usetype: 'stage',
+  //     phone: num,
+  //     message: `Your One Time Password is ${otp}`,
+  //     senderid: 'varsha'
+  //   }
+  //   await unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) =>{
+  //    console.log(bodyToSend)
+  //  })
+  //   return res.status(200).send({
+  //     message : otp
+  //   });
   }
   catch(err){
     throw err;
@@ -324,4 +326,4 @@ module.exports = {
   router,
   facepath1,
   facepath2
-};
+};  
