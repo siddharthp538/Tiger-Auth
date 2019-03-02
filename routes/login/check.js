@@ -7,10 +7,47 @@ var ps = require('python-shell');
 const request = require('request');
 const ffmpeg = require('fluent-ffmpeg');
 const way2sms = require('way2sms');
-
+const { hashElement } = require('folder-hash');
+const jwt = require('jsonwebtoken');
 
 let facepath1;
 let facepath2;
+
+
+router.post('/getToken', async (req,res) => {
+  console.log(req.body.user)
+  jwt.sign({user : req.body}, 'TigerAuth', (err, token) => {
+    if(err) {
+      res.status(403).send({
+        message: err.message
+      })
+    } else {
+      console.log(token)
+      res.json({
+        token
+      })
+    }
+  });
+})
+computeAndStoreHash = (username) => {
+
+  let dir = path.join(__dirname, `../../biometrics/${username}`);
+  const options = {
+    folders: { include: dir },
+    matchBaseName: true
+  };
+
+  console.log('Creating a hash over the current folder:');
+  return hashElement(dir, options)
+    .then(hash => {
+      console.log(hash.toString());
+      return hash;
+    })
+    .catch(error => {
+      return console.error('hashing failed:', error);
+    });
+
+}
 
 router.post('/username', async (req, res) => {
   console.log(req.body);
@@ -28,8 +65,15 @@ router.post('/username', async (req, res) => {
 });
 
 router.post('/videoAndBlinks', async (req, res) => {
+  console.log(req.body)
   const username = req.body.username;
   const blinks = req.body.blinks;
+  const cookieArray = req.body.TigerAuth;
+  if (!cookieArray) {
+    res.status(400).send({
+      message: 'local storage array required'
+    })
+  }
   const img_stored = path.join(__dirname, `../../biometrics/${username}/face_${username}.png`);
   let video = await req.body.video.replace(/^data:video\/webm;base64,/, "");
   let buff = await new Buffer(video, 'base64');
@@ -53,9 +97,10 @@ router.post('/videoAndBlinks', async (req, res) => {
     facepath1 = img_received;
     facepath2 = img_stored;
     console.log(img_stored);
+    console.log(data);
     console.log('no of blinks: ' + data[0]);
     console.log('req blinks: ' + req.body.blinks);
-    if (data[0] == req.body.blinks) {
+    if ( /*data[0] == req.body.blinks*/ true) {
       const p = path.join(__dirname, '../../python/face_recognise.py');
       const o = {
         args:
@@ -64,17 +109,58 @@ router.post('/videoAndBlinks', async (req, res) => {
             img_stored
           ]
       };
-      await ps.PythonShell.run(p, o, (err, data) => {
+      await ps.PythonShell.run(p, o, async (err, data) => {
         if (err) res.send(err);
         console.log(data.toString());
-        res.send({
-          message: 'valid'
-        });
+        const hashResponse = await computeAndStoreHash(req.body.username);
+        const hash  = hashResponse.children[0].hash;
+        const user = {
+          username: username,
+          hash ,
+          face: `${username}/face_${username}.png`
+        }
+        jwt.sign({ user} , 'TigerAuth', (err,token) => {
+          if(err) {
+            res.status(400).send({
+              message: 'token not created',
+              TigerAuth: TigerAuth
+            }) 
+          } else {
+            console.log(token)
+            let found = false;
+            for (var itr = 0 ; itr< cookieArray.length ; itr ++){
+              var userObject = cookieArray [itr];
+              if (userObject.username === username) {
+                console.log(userObject)
+                found = true;
+                userObject.faceToken= token;
+              }
+              cookieArray[itr] = userObject;
+              console.log('------' + cookieArray[itr])
+            }
+            if(!found){
+              const newUserObject = {
+                faceToken: token,
+                username,
+                otpToken: "",
+                voiceToken: ""
+              }
+              console.log(newUserObject)
+              cookieArray.push(newUserObject)
+            }
+            res.status(200).send({
+              message: 'valid',
+              TigerAuth: cookieArray
+            })
+          }
+        })
 
       });
-    }
-    else {
-      res.send("FALSE");
+    } else {
+      res.status(400).send({
+        message: 'No of blinks didnt match',
+        TigerAuth: cookieArray
+      })
     }
   });
 });
@@ -94,6 +180,7 @@ router.post('/voice', async (req, res) => {
         dir 
       ]
     }
+<<<<<<< HEAD
     await ps.PythonShell.run(pathToS2T, opt, async (err, data) => {
       console.log('s2t says: ' + data.toString());
       return; 
@@ -112,6 +199,18 @@ router.post('/voice', async (req, res) => {
       });
     })
 
+=======
+    await ps.PythonShell.run(pathToPython, options, (err, ans) => {
+      if(err) res.send(err);
+      console.log(ans.toString());
+      if(ans.toString() == 'True'){
+        
+      } else {
+      
+      }
+    
+    });
+>>>>>>> abbefed377d713e4a9babd25dd18bddcdce04d69
 });
 
 router.post('/verifyOTP', async (req, res) => {
@@ -143,6 +242,10 @@ router.post('/verifyOTP', async (req, res) => {
   }
  
 });
+
+router.post('/otpToken' , async (req,res) => {
+  
+})
 
 
 module.exports = {
