@@ -9,7 +9,9 @@ const { hashElement } = require('folder-hash');
 const way2sms = require('way2sms');
 const ps = require('python-shell');
 const jwt = require('jsonwebtoken');
-const unirest = require('unirest')
+const unirest = require('unirest');
+const sessionstorage = require('sessionstorage');
+
 let cnt = 1;
 router.get('/hash' , async(req,res) => {
   const hash = await computeAndStoreHash('siddharthp538');
@@ -177,6 +179,7 @@ router.post('/verifyOTP', async (req, res) => {
   console.log(otp)
   // try {
    
+<<<<<<< HEAD
   //   const bodyToSend = {
   //     apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
   //     secret: '0N05X4PUQ9WNSTWI',
@@ -185,6 +188,16 @@ router.post('/verifyOTP', async (req, res) => {
   //     message: `Your One Time Password is ${otp}`,
   //     senderid: 'varsha'
   //   }
+=======
+    const bodyToSend = {
+      apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
+      secret: '0N05X4PUQ9WNSTWI',
+      usetype: 'stage',
+      phone: req.body.phone,
+      message: `Your One Time Password is ${otp}`,
+      senderid: 'varsha'
+    }
+>>>>>>> 5958a53118f68a945f85feb9d21cc7afcf98d0e8
   //   unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) =>{
   //    console.log(bodyToSend)
   //  })
