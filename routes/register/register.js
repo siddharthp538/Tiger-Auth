@@ -173,22 +173,25 @@ router.post('/verifyUsername', async (req, res) => {
 
 router.post('/verifyOTP', async (req, res) => {
 
-  cookie = await way2sms.login('8779059156', 'Sagarika@123'); // reLogin
-
+  let cookie = await way2sms.login('8779059156', 'Sagarika@123'); // reLogin
+  console.log('1');
   const otp = Math.floor(100000 + Math.random() * 900000);
-  console.log(otp)
-  try {
-    await way2sms.send(cookie,req.body.phone,`Your One time Password is ${Math.floor(100000 + Math.random() * 900000)}`);
-  } catch (error) {
-    console.log(error);
-    console.log(JSON.stringify(error))
-    return res.status(400).send({
-      message: 'Error in Sending OTP to the following number',
-    });
-  } 
-  return res.status(200).send({
-    message : otp
+  res.send({
+    message: otp
   });
+  // try {
+  //   console.log(req.body.phone);
+  //   await way2sms.send(cookie,req.body.phone, 'hello');
+  // } catch (error) {
+  //   console.log(error);
+  //   console.log(JSON.stringify(error))
+  //   return res.status(400).send({
+  //     message: 'Error in Sending OTP to the following number',
+  //   });
+  // } 
+  // return res.status(200).send({
+  //   message : otp
+  // });
 
 });
 
