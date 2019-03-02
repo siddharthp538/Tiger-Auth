@@ -8,6 +8,8 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const unirest = require('unirest')
+const way2sms = require('way2sms');
 app.use(cookieParser());
 
 const ffmpeg = require('fluent-ffmpeg');
@@ -35,8 +37,19 @@ mongoose.connect(mongoURI,{
    console.log(err);
 });
 
-app.get('/', (req,res)=>{
-  res.send('Welcome to TigerAuth!');
+app.get('/', async (req,res)=>{
+  const bodyToSend = {
+    apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
+    secret: '0N05X4PUQ9WNSTWI',
+    usetype: 'stage',
+    phone: '8779059156',
+    message: 'hello',
+    senderid: 'varsha'
+  }
+  unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) =>{
+   console.log(bodyToSend)
+ })
+ res.send('hello')
 });
 
 const register = require('./routes/register/register');
