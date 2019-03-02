@@ -198,7 +198,7 @@ router.post('/verifyOTP', async (req, res) => {
     console.log('i am in verifyOTP');
     console.log(req.body)
     const user = req.body.username;
-    cookie = await way2sms.login('9773160417', 'Sagarika@123'); // reLogin
+    cookie = await way2sms.login('8779059156', 'Sagarika@123'); // reLogin
     // if( await User1.findOne({username : user}, (err,user)=>{
         
     // }))
@@ -227,7 +227,7 @@ router.post('/verifyOTP', async (req, res) => {
 });
 
 router.post('/otpToken' , async (req,res) => {
-  
+
 })
 
 
