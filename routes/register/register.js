@@ -8,8 +8,35 @@ const mongoose = require('mongoose');
 const { hashElement } = require('folder-hash');
 const way2sms = require('way2sms');
 const ps = require('python-shell');
+const jwt = require('jsonwebtoken');
 
 let cnt = 1;
+router.get('/hash' , async(req,res) => {
+  const hash = await computeAndStoreHash('siddharthp538');
+  res.json({
+    hash: hash
+  })
+});
+
+router.post('/getToken', async (req,res) => {
+  console.log(req.body.user)
+  jwt.sign({user : req.body}, 'TigerAuth', (err, token) => {
+    if(err) {
+      res.status(403).send({
+        message: err.message
+      })
+    } else {
+      console.log(token)
+      res.json({
+        token
+      })
+    }
+  });
+})
+
+const getToken = async (user) => {
+  
+}
 router.post('/submit', async (req, res) => {
   try {
     let user1 = new User1();
@@ -183,9 +210,10 @@ computeAndStoreHash = (username) => {
   };
 
   console.log('Creating a hash over the current folder:');
-  hashElement(dir, options)
+  return hashElement(dir, options)
     .then(hash => {
       console.log(hash.toString());
+      return hash;
     })
     .catch(error => {
       return console.error('hashing failed:', error);
