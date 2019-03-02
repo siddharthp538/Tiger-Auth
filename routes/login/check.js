@@ -205,12 +205,7 @@ router.post('/voice', async (req, res) => {
         const cookieArray = req.body.TigerAuth
         await ps.PythonShell.run(pathToPython, options, async(err, ans) => {
           if(err) res.send(err);
-<<<<<<< HEAD
           console.log(ans[0] + " " + ans[1]);
-=======
-
-          console.log(ans[0] + " -----" + ans[1])
->>>>>>> 5958a53118f68a945f85feb9d21cc7afcf98d0e8
           if(ans[1]==='True'){
             console.log('inside voice login!');
             const hashResponse = await computeAndStoreHash(req.body.username);
@@ -262,10 +257,6 @@ router.post('/voice', async (req, res) => {
               TigerAuth: cookieArray
             })
           }
-<<<<<<< HEAD
-  
-=======
->>>>>>> 5958a53118f68a945f85feb9d21cc7afcf98d0e8
           
         });
       } else{
