@@ -7,6 +7,8 @@ const User = require('../../models/user1');
 const Cookies   = require('js-cookie');
 const Client = require('../../models/client')
 const AccessKey = require('../../models/accessKey');
+var sessionstorage = require('sessionstorage')
+const unirest = require('unirest');
 
 function verifyToken(req, res, next) {
 
@@ -86,6 +88,16 @@ router.post('/' , verifyToken, async (req,res) => {
           if (authData.user.permissions.username) response.username = user.username
           response.callbackUrl = authData.user.callbackUrl;
           response.domainName = authData.user.domainName;
+          const sessUser = user ;
+          sessionstorage.setItem('sessUser', sessUser);
+          console.log( ' username of tiger' + sessionstorage.getItem('sessUser'))
+          if(response.domainName === 'TigerAuth.com') {
+            unirest.get(`https://${ip}:4200`).send().end(response =>{
+         console.log('getting');
+         res.redirect(`https://${ip}:4200/dashboard`);
+        
+     })
+          }
           res.json({
             response
           })

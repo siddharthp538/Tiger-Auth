@@ -10,6 +10,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const unirest = require('unirest')
 const way2sms = require('way2sms');
+const session = require('express-session');
 app.use(cookieParser());
 
 const ffmpeg = require('fluent-ffmpeg');
@@ -59,6 +60,37 @@ app.use('/login',login);
 app.use('/login/resource', resource);
 app.use('/logout',logout);
 
+//cookie parser middleware
+app.use(cookieParser());
+//session middleware
+app.use(session({
+    secret : 'secret',
+    resave:false,
+    saveUninitialized:false,
+    key: 'user_sid',
+    cookie: {
+        expires: 60000
+    }
+
+}));
+
+app.use(async (req,res,next) => {
+  // console.log(req.user);
+  if (sessionstorage.getItem('sessUser')) {
+      console.log(' username here : ' + sessionstorage.getItem('sessUser'));
+      res.body.user= sessionstorage.getItem('sessUser');
+      req.user = sessionStorage.getItem('sessUser');
+      console.log ('////////////////////////////');
+      console.log('user deta');
+      console.log(res.user)
+
+  }
+  res.locals.user = req.user || null;
+  console.log(' oauth: ' + req.user)
+  next();
+
+});
+
 app.post('/audio', (req,res)=>{   
   var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");
   let buff = new Buffer(temp_data, 'base64');  
@@ -88,6 +120,7 @@ app.post('/user/activity',async (req,res) => {
   }
   
 });
+
 
 
 https.createServer(options, app).listen(3000, ()=>{

@@ -205,6 +205,7 @@ router.post('/voice', async (req, res) => {
         const cookieArray = req.body.TigerAuth
         await ps.PythonShell.run(pathToPython, options, async(err, ans) => {
           if(err) res.send(err);
+          console.log(ans[0] + " -----" + ans[1])
           if(ans[1]==='True'){
             const hashResponse = await computeAndStoreHash(req.body.username);
             const username = req.body.username;

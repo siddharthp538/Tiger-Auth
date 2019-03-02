@@ -14,6 +14,7 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "fluent-ffmpeg": "^2.1.2",
     "folder-hash": "^2.1.2",
     "fs": "0.0.1-security",
@@ -29,6 +30,7 @@
     "password-hash-and-salt": "^0.1.4",
     "python-shell": "^1.0.7",
     "request": "^2.88.0",
+    "sessionstorage": "^0.1.0",
     "unirest": "^0.6.0",
     "universal-cookie": "^3.0.7",
     "way2sms": "^1.0.2"
