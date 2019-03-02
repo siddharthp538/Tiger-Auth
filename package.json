@@ -29,6 +29,7 @@
     "password-hash-and-salt": "^0.1.4",
     "python-shell": "^1.0.7",
     "request": "^2.88.0",
+    "sessionstorage": "^0.1.0",
     "unirest": "^0.6.0",
     "universal-cookie": "^3.0.7",
     "way2sms": "^1.0.2"

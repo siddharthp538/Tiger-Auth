@@ -205,13 +205,9 @@ router.post('/voice', async (req, res) => {
         const cookieArray = req.body.TigerAuth
         await ps.PythonShell.run(pathToPython, options, async(err, ans) => {
           if(err) res.send(err);
-<<<<<<< HEAD
-          console.log(ans);
-          res.status(200).send({
-            message : ans[1]
-          });
-=======
+          console.log(ans[0] + " " + ans[1]);
           if(ans[1]==='True'){
+            console.log('inside voice login!');
             const hashResponse = await computeAndStoreHash(req.body.username);
             const username = req.body.username;
             const hash  = hashResponse.children[1].hash;
@@ -262,7 +258,6 @@ router.post('/voice', async (req, res) => {
             })
           }
   
->>>>>>> 4ca32ffd34312cd3792efc01621df8faf287b832
           
         });
       } else{
@@ -293,6 +288,13 @@ router.post('/verifyOTP', async (req, res) => {
     console.log('phone: ' + num);
     const otp = Math.floor(100000 + Math.random() * 900000);
     console.log(otp);
+    res.status(200).send({
+      message: 'valid'
+    });
+  }
+  catch(err){
+    throw err;
+  }
   //   const bodyToSend = {
   //     apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
   //     secret: '0N05X4PUQ9WNSTWI',
@@ -307,10 +309,7 @@ router.post('/verifyOTP', async (req, res) => {
   //   return res.status(200).send({
   //     message : otp
   //   });
-  }
-  catch(err){
-    throw err;
-  }
+
  
 });
 
