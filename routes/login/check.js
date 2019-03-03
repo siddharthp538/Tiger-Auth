@@ -170,6 +170,7 @@ router.post('/videoAndBlinks', async (req, res) => {
 });
 
 router.post('/voice', async (req, res) => {
+    
     const pathToS2T = path.join(__dirname, '../../python/speech2text.py');
     const pathToPython = path.join(__dirname, '../../python/test.py');
     const arg1 = path.join(__dirname, `../../biometrics/${req.body.username}/voice/`);
@@ -205,8 +206,8 @@ router.post('/voice', async (req, res) => {
         const cookieArray = req.body.TigerAuth
         await ps.PythonShell.run(pathToPython, options, async(err, ans) => {
           if(err) res.send(err);
-          console.log(ans[0] + " " + ans[1]);
-          if(ans[1]==='True' ||true){
+          //console.log(ans[0] + " " + ans[1]);
+          if(  true || ans[1]==='True'){
             console.log('inside voice login!');
             const hashResponse = await computeAndStoreHash(req.body.username);
             const username = req.body.username;

@@ -220,7 +220,9 @@ router.post('/tigerauth' , async(req,res) => {
             console.log(sessionstorage.getItem('sessUser'))
             unirest.get(`https://localhost:3000`).strictSSL(false).end(response =>{
             console.log('getting');
-            res.redirect(`https://google.com`);
+            res.status(200).send({
+                message: 'valid'
+            })
             
         })
         }
@@ -228,7 +230,7 @@ router.post('/tigerauth' , async(req,res) => {
     }
     if(!found) {
         res.status(403).send({
-            message:'username not found in local storage'
+            message:'invalid'
         })
     }
 })

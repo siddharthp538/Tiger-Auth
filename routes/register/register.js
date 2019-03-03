@@ -146,9 +146,7 @@ router.post('/submit', async (req, res) => {
     }, (req, res) => {
       console.log('Successfully saved in blockchain');
     });
-    res.send({
-      message: 'saved'
-    });
+    
     
     console.log('Welcome to TigerAuth, my friend!');
   
@@ -273,32 +271,31 @@ router.post('/verifyOTP', async (req, res) => {
 
   const otp = Math.floor(100000 + Math.random() * 900000);
   console.log(otp)
-  // try {
-   
-  //   const bodyToSend = {
-  //     apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
-  //     secret: '0N05X4PUQ9WNSTWI',
-  //     usetype: 'stage',
-  //     phone: req.body.phone,
-  //     message: `Your One Time Password is ${otp}`,
-  //     senderid: 'varsha'
-  //   }
-  //   unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) =>{
-  //    console.log(bodyToSend)
-  //  })
-   return res.status(200).send({
-    message : otp
-   });
-  // });
+  try {
 
-  // } catch (error) {    
-  //   console.log(error.message);
-  //   console.log(JSON.stringify(error))
-  //   return res.status(400).send({
-  //     message: error.message
-  //   });
-  
-  
+    const bodyToSend = {
+      apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
+      secret: '0N05X4PUQ9WNSTWI',
+      usetype: 'stage',
+      phone: req.body.phone,
+      message: `Your One Time Password is ${otp}`,
+      senderid: 'varsha'
+    }
+    unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) => {
+      console.log(bodyToSend)
+    })
+    return res.status(200).send({
+      message: otp
+    });
+
+  } catch (error) {
+    console.log(error.message);
+    console.log(JSON.stringify(error))
+    return res.status(400).send({
+      message: error.message
+    });
+  }
+
 
 });
 router.post('/verifyUsername', async (req, res) => {

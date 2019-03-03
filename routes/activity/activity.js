@@ -50,6 +50,13 @@ router.post('/getData', (req,res)=>{
 });
 
 
+router.get('/user' , async(req,res) => {
+    const dbResponse = await  Activity.aggregate([ { $unwind : $applications }]);
+    res.status(200).send({
+        dbResponse
+    })
+})
+
 
 
 
