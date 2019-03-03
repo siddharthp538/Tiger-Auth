@@ -1,0 +1,5 @@
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/VarshaIsTheBest/voice/voice_1_VarshaIsTheBest.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/VarshaIsTheBest/voice/voice_2_VarshaIsTheBest.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/VarshaIsTheBest/voice/voice_3_VarshaIsTheBest.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/VarshaIsTheBest/voice/voice_4_VarshaIsTheBest.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/VarshaIsTheBest/voice/voice_5_VarshaIsTheBest.wav

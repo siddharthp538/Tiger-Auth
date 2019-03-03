@@ -77,21 +77,21 @@ app.use(session({
 
 }));
 
-// app.use(async (req,res,next) => {
-//   // console.log(req.user);
-//   if (sessionstorage.getItem('sessUser')) {
-//       console.log(' username here : ' + sessionstorage.getItem('sessUser'));
-//       req.user = sessionstorage.getItem('sessUser');
-//       console.log ('////////////////////////////');
-//       console.log('user deta');
-//       console.log(req.user)
+app.use(async (req,res,next) => {
+  // console.log(req.user);
+  if (sessionstorage.getItem('sessUser')) {
+      console.log(' username here : ' + sessionstorage.getItem('sessUser'));
+      req.user = sessionstorage.getItem('sessUser');
+      console.log ('////////////////////////////');
+      console.log('user deta');
+      console.log(req.user)
 
-//   }
-//   res.locals.user = req.user || null;
-//   console.log(' oauth: ' + req.user)
-//   next();
+  }
+  res.locals.user = req.user || null;
+  console.log(' oauth: ' + req.user)
+  next();
 
-// });
+});
 
 app.post('/audio', (req,res)=>{   
   var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");

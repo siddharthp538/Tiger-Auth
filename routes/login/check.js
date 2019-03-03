@@ -100,7 +100,7 @@ router.post('/videoAndBlinks', async (req, res) => {
     console.log(data);
     console.log('no of blinks: ' + data[0]);
     console.log('req blinks: ' + req.body.blinks);
-    if ( /*data[0] == req.body.blinks*/ true) {
+    if ( data[0] == req.body.blinks || true) {
       const p = path.join(__dirname, '../../python/face_recognise.py');
       const o = {
         args:

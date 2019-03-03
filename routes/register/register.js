@@ -22,7 +22,7 @@ router.get('/hash' , async(req,res) => {
 
 router.post('/getToken', async (req,res) => {
   console.log(req.body.user)
-  jwt.sign({user : req.body}, 'TigerAuth', (err, token) => {
+ await jwt.sign({user : req.body}, 'TigerAuth', (err, token) => {
     if(err) {
       res.status(403).send({
         message: err.message
@@ -38,6 +38,34 @@ router.post('/getToken', async (req,res) => {
 
 const getToken = async (user) => {
   
+}
+const addToken = async (user, cookieArray , key ,username) =>{
+  await  jwt.sign({ user} , 'TigerAuth', (err,token) => {
+    if(err) {
+      res.status(400).send({
+        message: 'token not created',
+        TigerAuth: TigerAuth
+      }) 
+    } else {
+      console.log(token)
+      let found = false;
+      for (var itr = 0 ; itr< cookieArray.length ; itr ++){
+        var userObject = cookieArray [itr];
+        if (userObject.username === username) {
+          console.log(userObject)
+          found = true;
+          if(key === 'faceToken')
+          userObject.faceToken= token;
+          else if (key === 'voiceToken')
+          userObject.voiceToken = token;
+          else if(key === 'otpToken')
+            userObject.otpToken = token;
+        }
+        cookieArray[itr] = userObject;
+        console.log('------' + JSON.stringify(cookieArray[itr]))
+      }
+    }
+  })
 }
 router.post('/submit', async (req, res) => {
   try {
@@ -93,21 +121,61 @@ router.post('/submit', async (req, res) => {
       console.log(voicedata);
       console.log('I am inside the python shell!');
     });
-    TigerAuth.push({
+    const username = req.body.user.username;
+    const cookieArray = TigerAuth;
+    cookieArray.push({
+      username,
       faceToken: '',
       voiceToken: '',
-      otpToken: '',
-      username: req.body.user.username
+      otpToken: ''
     })
-    console.log(TigerAuth[TigerAuth.length -1])
-    await computeAndStoreHash(req.body.user.username);
-    res.send({
-      message: 'SAVED',
-      TigerAuth
-    });
+    
+    //await computeAndStoreHash(req.body.user.username);
+    const hashResponse = await computeAndStoreHash(req.body.user.username);
+    //face token
+    let user = {
+      username: username,
+      hash:  hashResponse.children[0].hash ,
+      face: `${username}/face_${username}.png`
+    }
+    jwt.sign({ user } , 'TigerAuth' , (err,token) => {
+      if(err) {
+        throw err;
+      } else {
+        cookieArray[cookieArray.length-1].faceToken = token;
+         user = {
+          username,
+          hash: hashResponse.children[1].hash,
+          voice: `${username}/voice/voice_1_${username}.wav`
+        }
+        jwt.sign({user} , 'TigerAuth' , (err,token) => {
+          if(err) {
+            throw err;
+          } else {
+            cookieArray[cookieArray.length -1].voiceToken = token;
+            user = {
+              username,
+              hash: hashResponse.hash,
+              otp:  `${username}/otp_${username}.txt`
+            }
+            jwt.sign({user}, 'TigerAuth' , (err,token) => {
+              if(err){
+                throw err;
+              } else {
+                cookieArray[cookieArray.length-1].otpToken = token;
+                res.status(200).send({
+                  message: 'valid',
+                  TigerAuth: cookieArray
+                })
+              }
+            })
+          }
+        })
+      }
+    }) 
 
-  }
-  catch (err) {
+    
+  } catch (err) {
     res.status(400).send({
       message: err.message
     });
