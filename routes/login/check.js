@@ -170,6 +170,7 @@ router.post('/videoAndBlinks', async (req, res) => {
 });
 
 router.post('/voice', async (req, res) => {
+    
     const pathToS2T = path.join(__dirname, '../../python/speech2text.py');
     const pathToPython = path.join(__dirname, '../../python/test.py');
     const arg1 = path.join(__dirname, `../../biometrics/${req.body.username}/voice/`);
