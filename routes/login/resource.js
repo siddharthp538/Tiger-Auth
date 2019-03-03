@@ -26,6 +26,7 @@ function verifyToken(req, res, next) {
 router.post('/' , verifyToken, async (req,res) => {
   try {
     console.log('///////////////////////////////////////////////')
+    console.log(req.token);
     if(!req.token){
       res.status(403).send({
         message: "clientToken Required" 
@@ -37,7 +38,7 @@ router.post('/' , verifyToken, async (req,res) => {
         message: "Id required"
       })
     }
-    
+    console.log(req.body.domainName)
     if(!req.body.domainName){
       res.status(400).send({
         message: "domainName required"
@@ -52,7 +53,9 @@ router.post('/' , verifyToken, async (req,res) => {
         message: "id not found"
       })
     }
+    
     const clientDetail = await Client.findOne({ domainName: req.body.domainName });
+    console.log(clientDetail)
     if(!clientDetail) {
       res.status(403).send({
         message: 'client not registered'
@@ -66,9 +69,43 @@ router.post('/' , verifyToken, async (req,res) => {
         })
       } else {
         console.log(authData)
+        jwt.verify(dbResponse.accessToken,'TigerAuthAccessToken', async(err,authData)=> {
+        
+          if(err) {
+            res.status(403).send({
+              message: 'Invalid AccessToken'
+            })
+          } else {
+            console.log('///////' + JSON.stringify(authData));
+            const username  =  authData.user.username;
+            const user = await User.findOne({username});
+            const response = {};
+            if (authData.user.permissions.face) response.img = user.img
+            if (authData.user.permissions.audio) response.audio = user.audio.audio1;
+            if (authData.user.permissions.name) response.name = user.name
+            if (authData.user.permissions.phone) response.phone = user.phone
+            if (authData.user.permissions.dob) response.dob = user.dob
+            if (authData.user.permissions.username) response.username = user.username
+            response.callbackUrl = authData.user.callbackUrl;
+            response.domainName = authData.user.domainName;
+            console.log('0000000000' + JSON.stringify(response))
+            // if(response.domainName === 'www.TigerAuth.com') {
+            //   sessionStorage.setItem('sessUser', user)
+            //   console.log('data stored in session :' + sessionStorage.getItem('sessUser'))
+            //    unirest.get(`https://${ip}:4200`).strictSSL(false).end((response) => {
+            //      console.log('getting');
+            //      res.redirect(`https://${ip}:4200/profile`);
+            //    })
+            // }
+            res.json({
+              response
+            })
+          }
+        })
       }
     })
   
+<<<<<<< HEAD
       jwt.verify(dbResponse.accessToken,'TigerAuthAccessToken', async(err,authData)=> {
         
         if(err) {
@@ -103,6 +140,9 @@ router.post('/' , verifyToken, async (req,res) => {
           })
         }
       })
+=======
+
+>>>>>>> a3d3c4b25ecf0fd6e83ebca762788fda25fbc69f
     } catch (err) {
       res.json({
         err

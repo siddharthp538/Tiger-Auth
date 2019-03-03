@@ -1,0 +1,5 @@
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kkke/voice/voice_1_kkke.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kkke/voice/voice_2_kkke.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kkke/voice/voice_3_kkke.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kkke/voice/voice_4_kkke.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kkke/voice/voice_5_kkke.wav
