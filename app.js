@@ -11,12 +11,16 @@ const cookieParser = require('cookie-parser');
 const unirest = require('unirest')
 const way2sms = require('way2sms');
 const session = require('express-session');
+const helmet = require('helmet');
+const sessionstorage = require('sessionstorage');
+
+app.use(helmet());
+app.disable('x-powered-by')
 app.use(cookieParser());
 
 const ffmpeg = require('fluent-ffmpeg');
 const Activity = require('./models/activity');
 const https = require('https');
-
 let options = {
   key : fs.readFileSync('./server.key'),
   cert : fs.readFileSync('./server.crt')
@@ -42,6 +46,7 @@ app.get('/', async (req,res)=>{
  
  res.send('hello')
 });
+var ObjectId = require('mongodb').ObjectID;
 
 const register = require('./routes/register/register');
 const check = require('./routes/login/check').router;
@@ -50,7 +55,7 @@ const loginUsers = require('./routes/login/loginUsers');
 const login = require('./routes/login/login');
 const resource = require('./routes/login/resource');
 const logout = require('./routes/logout/logout');
-
+const activityStatus = require('./routes/activity/activity');
 
 app.use('/register',register);
 app.use('/check',check);
@@ -59,6 +64,7 @@ app.use('/loginUsers',loginUsers);
 app.use('/login',login);
 app.use('/login/resource', resource);
 app.use('/logout',logout);
+app.use('/activity', activityStatus);
 
 //cookie parser middleware
 app.use(cookieParser());
@@ -74,22 +80,22 @@ app.use(session({
 
 }));
 
-app.use(async (req,res,next) => {
-  // console.log(req.user);
-  if (sessionstorage.getItem('sessUser')) {
-      console.log(' username here : ' + sessionstorage.getItem('sessUser'));
-      res.body.user= sessionstorage.getItem('sessUser');
-      req.user = sessionStorage.getItem('sessUser');
-      console.log ('////////////////////////////');
-      console.log('user deta');
-      console.log(res.user)
+// app.use(async (req,res,next) => {
+//   // console.log(req.user);
+//   if (sessionstorage.getItem('sessUser')) {
+//       console.log(' username here : ' + sessionstorage.getItem('sessUser'));
+//       res.body.user= sessionstorage.getItem('sessUser');
+//       req.user = sessionStorage.getItem('sessUser');
+//       console.log ('////////////////////////////');
+//       console.log('user deta');
+//       //console.log(res.user)
 
-  }
-  res.locals.user = req.user || null;
-  console.log(' oauth: ' + req.user)
-  next();
+//   }
+//   res.locals.user = req.user || null;
+//   //console.log(' oauth: ' + req.user)
+//   next();
 
-});
+// });
 
 app.post('/audio', (req,res)=>{   
   var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");

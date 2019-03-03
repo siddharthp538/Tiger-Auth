@@ -11,19 +11,20 @@ const ps = require('python-shell');
 const jwt = require('jsonwebtoken');
 const unirest = require('unirest');
 const sessionstorage = require('sessionstorage');
+const request = require('request');
 
 let cnt = 1;
-router.get('/hash' , async(req,res) => {
+router.get('/hash', async (req, res) => {
   const hash = await computeAndStoreHash('siddharthp538');
   res.json({
     hash: hash
   })
 });
 
-router.post('/getToken', async (req,res) => {
+router.post('/getToken', async (req, res) => {
   console.log(req.body.user)
-  jwt.sign({user : req.body}, 'TigerAuth', (err, token) => {
-    if(err) {
+  jwt.sign({ user: req.body }, 'TigerAuth', (err, token) => {
+    if (err) {
       res.status(403).send({
         message: err.message
       })
@@ -37,7 +38,7 @@ router.post('/getToken', async (req,res) => {
 })
 
 const getToken = async (user) => {
-  
+
 }
 router.post('/submit', async (req, res) => {
   try {
@@ -57,7 +58,7 @@ router.post('/submit', async (req, res) => {
     //console.log("===================3" + imgpath)
     user1.img = imgpath;
     //console.log(user1);
-    let temp  = await voice_store(req.body.user);
+    let temp = await voice_store(req.body.user);
     temp.img = user1.img;
     //console.log("------******-----" + temp)
     //console.log("==================4");
@@ -66,36 +67,62 @@ router.post('/submit', async (req, res) => {
     //console.log(temp.username);
     let data = '';
     const pt = path.join(__dirname, `../../biometrics/${temp.username}/voice/`);
-    for(var i=1;i<=5;i++){
+    for (var i = 1; i <= 5; i++) {
       const myData = 'voice_' + (i) + '_' + temp.username + '.wav';
       data = data + pt + myData + '\n'
     }
-    await fs.writeFileSync(pt+'/path.txt', data);
-    console.log( typeof User1 === typeof temp) 
+    await fs.writeFileSync(pt + '/path.txt', data);
+    console.log(typeof User1 === typeof temp)
     await temp.save();
     const dir = path.join(__dirname, `../../biometrics/${temp.username}/voice/`);
     const pathTopath = dir + 'path.txt';
     const pathToPython = path.join(__dirname, '../../python/modeltraining.py');
     console.log(pathToPython + '\n' + pathTopath + '\n' + dir);
+
     let options = {
-      args : [
+      args: [
         pathTopath,
         dir
-  
+
       ]
 
     }
-    await ps.PythonShell.run(pathToPython, options , async (err, voicedata) => {
-      if(err){
+    await ps.PythonShell.run(pathToPython, options, async (err, voicedata) => {
+      if (err) {
         console.log(err);
       }
       console.log(voicedata);
       console.log('I am inside the python shell!');
     });
-    await computeAndStoreHash(req.body.user.username);
-    res.send({
-      message: 'SAVED'
+    const obj = await computeAndStoreHash(req.body.user.username);
+    console.log(obj);
+    const final_obj = {
+      $class: "org.user.data.User",
+      username: temp.username,
+      name: temp.name,
+      phoneNumber: temp.phone,
+      dateOfBirth: temp.dob,
+      biometricHash: obj.hash,
+      imageHash: obj.children[0].hash,
+      audioHash: obj.children[1].hash
+    }
+    console.log(final_obj);
+    let ans = 0;
+    await request.post({
+      url: 'http://172.30.9.156:3000/api/org.user.data.User',
+      body: final_obj,
+      headers: { 'content-type': 'application/json' },
+      json: true
+
+    }, (req, res) => {
+      console.log('Successfully saved in blockchain');
     });
+    res.send({
+      message: 'saved'
+    });
+    
+    console.log('Welcome to TigerAuth, my friend!');
+  
 
   }
   catch (err) {
@@ -129,25 +156,25 @@ async function voice_store(user, username) {
     let buff = new Buffer(temp_data, 'base64');
     user.audio.audio1 = path.join(__dirname, `../../biometrics/${user.username}/voice/`) + vname;
     await fs.writeFileSync(user.audio.audio1, buff);
-    
+
     vname = 'voice_2_' + user.username + ".wav";
     temp_data = user.audio.audio2.replace(/^data:audio\/wav;base64,/, "");
     buff = new Buffer(temp_data, 'base64');
     user.audio.audio2 = path.join(__dirname, `../../biometrics/${user.username}/voice/`) + vname;
     await fs.writeFileSync(user.audio.audio2, buff);
-    
+
     vname = 'voice_3_' + user.username + ".wav";
     temp_data = user.audio.audio3.replace(/^data:audio\/wav;base64,/, "");
     buff = new Buffer(temp_data, 'base64');
     user.audio.audio3 = path.join(__dirname, `../../biometrics/${user.username}/voice/`) + vname;
     await fs.writeFileSync(user.audio.audio3, buff);
-    
+
     vname = 'voice_4_' + user.username + ".wav";
     temp_data = user.audio.audio4.replace(/^data:audio\/wav;base64,/, "");
     buff = new Buffer(temp_data, 'base64');
     user.audio.audio4 = path.join(__dirname, `../../biometrics/${user.username}/voice/`) + vname;
     await fs.writeFileSync(user.audio.audio4, buff);
-    
+
     vname = 'voice_5_' + user.username + ".wav";
     temp_data = user.audio.audio5.replace(/^data:audio\/wav;base64,/, "");
     buff = new Buffer(temp_data, 'base64');
@@ -161,9 +188,40 @@ async function voice_store(user, username) {
   }
 }
 
+router.post('/verifyOTP', async (req, res) => {
+
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  console.log(otp)
+  try {
+
+    const bodyToSend = {
+      apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
+      secret: '0N05X4PUQ9WNSTWI',
+      usetype: 'stage',
+      phone: req.body.phone,
+      message: `Your One Time Password is ${otp}`,
+      senderid: 'varsha'
+    }
+    unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) => {
+      console.log(bodyToSend)
+    })
+    return res.status(200).send({
+      message: otp
+    });
+
+  } catch (error) {
+    console.log(error.message);
+    console.log(JSON.stringify(error))
+    return res.status(400).send({
+      message: error.message
+    });
+  }
+
+
+});
 router.post('/verifyUsername', async (req, res) => {
   if (await User1.findOne({ username: req.body.username })) {
-    return res.status(400).send({
+    return res.status(200).send({
       message: 'Please enter a Unique user name!'
     });
   } else {
@@ -173,49 +231,6 @@ router.post('/verifyUsername', async (req, res) => {
   }
 });
 
-router.post('/verifyOTP', async (req, res) => {
-
-  const otp = Math.floor(100000 + Math.random() * 900000);
-  console.log(otp)
-  // try {
-   
-<<<<<<< HEAD
-  //   const bodyToSend = {
-  //     apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
-  //     secret: '0N05X4PUQ9WNSTWI',
-  //     usetype: 'stage',
-  //     phone: req.body.phone,
-  //     message: `Your One Time Password is ${otp}`,
-  //     senderid: 'varsha'
-  //   }
-=======
-    const bodyToSend = {
-      apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
-      secret: '0N05X4PUQ9WNSTWI',
-      usetype: 'stage',
-      phone: req.body.phone,
-      message: `Your One Time Password is ${otp}`,
-      senderid: 'varsha'
-    }
->>>>>>> 5958a53118f68a945f85feb9d21cc7afcf98d0e8
-  //   unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) =>{
-  //    console.log(bodyToSend)
-  //  })
-   return res.status(200).send({
-    message : otp
-   });
-  // });
-
-  // } catch (error) {    
-  //   console.log(error.message);
-  //   console.log(JSON.stringify(error))
-  //   return res.status(400).send({
-  //     message: error.message
-  //   });
-  
-  
-
-});
 
 computeAndStoreHash = (username) => {
 
@@ -228,7 +243,7 @@ computeAndStoreHash = (username) => {
   console.log('Creating a hash over the current folder:');
   return hashElement(dir, options)
     .then(hash => {
-      console.log(hash.toString());
+      //console.log(hash.toString());
       return hash;
     })
     .catch(error => {
