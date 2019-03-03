@@ -1,21 +1,36 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../../models/user');
-const sessionstorage = require('sessionstorage')
+const sessionstorage = require('sessionstorage');
+const ip = require('../../ip')
 const ensureAuthenticated = (req , res , next ) => {
     if(sessionstorage.getItem('sessUser'))
         next();
-    res.redirect('/')
+    
 
 }
-router.get('/' , ensureAuthenticated , async(req,res) => {
-    console.log('in user/:id' + sessionstorage.getItem('sessUser'))
-    //console.log('in req.user', req.user)
-    const userData = sessionstorage.getItem('sessUser')
-    console.log('userData ,' + userData)
-    res.json({
-        userData
-    })
+router.get('/' , async(req,res) => {
+    if( sessionstorage.getItem('sessUser')) {
+        console.log('in user/:id' + sessionstorage.getItem('sessUser'))
+        //console.log('in req.user', req.user)
+        const userData = sessionstorage.getItem('sessUser')
+        console.log('userData ,' + userData)
+        const  newUser = {
+            name: userData.name,
+            phone: userData.phone,
+            username: userData.username,
+            img: userData.img,
+            dob: userData.dob
+        }
+        res.json({
+            userData: newUser
+        })
+    } else {
+        res.json({
+            userData: null
+        })
+        
+    }
     // if(!userData) {
     //     res.redirect(`https://${ip}:4200/`)
     // } else {

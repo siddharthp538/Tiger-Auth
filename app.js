@@ -56,7 +56,7 @@ const login = require('./routes/login/login');
 const resource = require('./routes/login/resource');
 const logout = require('./routes/logout/logout');
 const activityStatus = require('./routes/activity/activity');
-const user = require('./routes/User/user')
+const userdata = require('./routes/User/user')
 
 
 app.use('/register',register);
@@ -67,7 +67,7 @@ app.use('/login',login);
 app.use('/login/resource', resource);
 app.use('/logout',logout);
 app.use('/activity', activityStatus);
-app.use('/user',user)
+app.use('/userdata',userdata)
 
 //cookie parser middleware
 app.use(cookieParser());

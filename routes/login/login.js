@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const Client = require('../../models/client');
-const User = require('../../models/user');
+const User = require('../../models/user1');
 const hashAndSalt = require('password-hash-and-salt');
 const Key = require('../../models/key')
 const AccessKey = require('../../models/accessKey');
@@ -199,6 +199,8 @@ router.post('/tigerauth' , async(req,res) => {
             message: 'localstorage array required'
         })
     }
+    console.log(req.body.username);
+    
     const cookieArray = req.body.TigerAuth;
     let found = false ;
     for(var itr =0 ; itr < cookieArray.length ;itr++ ){
@@ -215,9 +217,9 @@ router.post('/tigerauth' , async(req,res) => {
             found = true;
             console.log(userObject)
             const userData = await  User.findOne({ username : req.body.username})
-            console.log(userData)
-            sessionstorage.setItem('sessUser' , userData)
-            console.log(sessionstorage.getItem('sessUser'))
+            console.log('-----' + userData)
+            await sessionstorage.setItem('sessUser' , userData)
+            await console.log(sessionstorage.getItem('sessUser'))
             unirest.get(`https://localhost:3000`).strictSSL(false).end(response =>{
             console.log('getting');
             res.status(200).send({
