@@ -11,15 +11,11 @@ const cookieParser = require('cookie-parser');
 const unirest = require('unirest')
 const way2sms = require('way2sms');
 const session = require('express-session');
-<<<<<<< HEAD
 const helmet = require('helmet');
 const sessionstorage = require('sessionstorage');
 
 app.use(helmet());
 app.disable('x-powered-by')
-=======
-const sessionstorage = require('sessionstorage')
->>>>>>> a3d3c4b25ecf0fd6e83ebca762788fda25fbc69f
 app.use(cookieParser());
 
 const ffmpeg = require('fluent-ffmpeg');
@@ -59,12 +55,9 @@ const loginUsers = require('./routes/login/loginUsers');
 const login = require('./routes/login/login');
 const resource = require('./routes/login/resource');
 const logout = require('./routes/logout/logout');
-<<<<<<< HEAD
 const activityStatus = require('./routes/activity/activity');
-=======
 const user = require('./routes/User/user')
 
->>>>>>> a3d3c4b25ecf0fd6e83ebca762788fda25fbc69f
 
 app.use('/register',register);
 app.use('/check',check);
@@ -73,11 +66,8 @@ app.use('/loginUsers',loginUsers);
 app.use('/login',login);
 app.use('/login/resource', resource);
 app.use('/logout',logout);
-<<<<<<< HEAD
 app.use('/activity', activityStatus);
-=======
 app.use('/user',user)
->>>>>>> a3d3c4b25ecf0fd6e83ebca762788fda25fbc69f
 
 //cookie parser middleware
 app.use(cookieParser());
@@ -93,24 +83,6 @@ app.use(session({
 
 }));
 
-<<<<<<< HEAD
-// app.use(async (req,res,next) => {
-//   // console.log(req.user);
-//   if (sessionstorage.getItem('sessUser')) {
-//       console.log(' username here : ' + sessionstorage.getItem('sessUser'));
-//       res.body.user= sessionstorage.getItem('sessUser');
-//       req.user = sessionStorage.getItem('sessUser');
-//       console.log ('////////////////////////////');
-//       console.log('user deta');
-//       //console.log(res.user)
-
-//   }
-//   res.locals.user = req.user || null;
-//   //console.log(' oauth: ' + req.user)
-//   next();
-
-// });
-=======
 app.use(async (req,res,next) => {
   // console.log(req.user);
   if (sessionstorage.getItem('sessUser')) {
@@ -126,7 +98,6 @@ app.use(async (req,res,next) => {
   next();
 
 });
->>>>>>> a3d3c4b25ecf0fd6e83ebca762788fda25fbc69f
 
 app.post('/audio', (req,res)=>{   
   var temp_data = req.body.audio.replace(/^data:audio\/wav;base64,/, "");

@@ -23,13 +23,8 @@ router.get('/hash', async (req, res) => {
 
 router.post('/getToken', async (req, res) => {
   console.log(req.body.user)
-<<<<<<< HEAD
-  jwt.sign({ user: req.body }, 'TigerAuth', (err, token) => {
-    if (err) {
-=======
  await jwt.sign({user : req.body}, 'TigerAuth', (err, token) => {
     if(err) {
->>>>>>> a3d3c4b25ecf0fd6e83ebca762788fda25fbc69f
       res.status(403).send({
         message: err.message
       })
@@ -128,7 +123,6 @@ router.post('/submit', async (req, res) => {
       console.log(voicedata);
       console.log('I am inside the python shell!');
     });
-<<<<<<< HEAD
     const obj = await computeAndStoreHash(req.body.user.username);
     console.log(obj);
     const final_obj = {
@@ -158,7 +152,6 @@ router.post('/submit', async (req, res) => {
     
     console.log('Welcome to TigerAuth, my friend!');
   
-=======
     const username = req.body.user.username;
     const cookieArray = TigerAuth;
     cookieArray.push({
@@ -211,7 +204,6 @@ router.post('/submit', async (req, res) => {
         })
       }
     }) 
->>>>>>> a3d3c4b25ecf0fd6e83ebca762788fda25fbc69f
 
     
   } catch (err) {
@@ -281,33 +273,6 @@ router.post('/verifyOTP', async (req, res) => {
 
   const otp = Math.floor(100000 + Math.random() * 900000);
   console.log(otp)
-<<<<<<< HEAD
-  try {
-
-    const bodyToSend = {
-      apikey: 'DZ5614KZ864GAY8EYARRMSNG3UMCHYVB',
-      secret: '0N05X4PUQ9WNSTWI',
-      usetype: 'stage',
-      phone: req.body.phone,
-      message: `Your One Time Password is ${otp}`,
-      senderid: 'varsha'
-    }
-    unirest.post(`http://www.way2sms.com/api/v1/sendCampaign`).send(bodyToSend).strictSSL(false).end(async (response) => {
-      console.log(bodyToSend)
-    })
-    return res.status(200).send({
-      message: otp
-    });
-
-  } catch (error) {
-    console.log(error.message);
-    console.log(JSON.stringify(error))
-    return res.status(400).send({
-      message: error.message
-    });
-  }
-
-=======
   // try {
    
   //   const bodyToSend = {
@@ -334,7 +299,6 @@ router.post('/verifyOTP', async (req, res) => {
   //   });
   
   
->>>>>>> a3d3c4b25ecf0fd6e83ebca762788fda25fbc69f
 
 });
 router.post('/verifyUsername', async (req, res) => {

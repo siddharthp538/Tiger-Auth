@@ -47,6 +47,12 @@ let User1Schema = mongoose.Schema({
       required: true,
     }
 
+  },
+  applications : {
+    clientId : {
+      type : mongoose.Types.ObjectId,
+      ref: 'client'
+    }
   }
 });
 
