@@ -7,10 +7,23 @@ router.post('/store' , async (req,res) => {
     const domainName = req.body.domainName ;
     const  password = req.body.password;
 
-    const newCred  = Credential({
+    const newCred  =await Credential({
         username,
         domainName,
         password
-    })
-    jwt.sign({ newCred })
-})
+    }).save();
+
+});
+router.post('/retrive', (req,res)=>{
+    const db = Credential.find({username : req.body.username});
+    if(!db){
+        res.status(400).send({
+            message: 'no user found'
+        });
+    }
+    res.status(200).send({
+        message: db.password
+    });
+});
+
+module.exports=router;
