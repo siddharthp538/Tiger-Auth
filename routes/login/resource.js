@@ -105,7 +105,40 @@ router.post('/' , verifyToken, async (req,res) => {
       }
     })
   
-
+      jwt.verify(dbResponse.accessToken,'TigerAuthAccessToken', async(err,authData)=> {
+        
+        if(err) {
+          res.status(403).send({
+            message: 'Invalid AccessToken'
+          })
+        } else {
+          console.log(authData);
+          const username  =  authData.user.username;
+          const user = await User.findOne({username});
+          const response = {};
+          if (authData.user.permissions.face) response.img = user.img
+          if (authData.user.permissions.audio) response.audio = user.audio.audio1;
+          if (authData.user.permissions.name) response.name = user.name
+          if (authData.user.permissions.phone) response.phone = user.phone
+          if (authData.user.permissions.dob) response.dob = user.dob
+          if (authData.user.permissions.username) response.username = user.username
+          response.callbackUrl = authData.user.callbackUrl;
+          response.domainName = authData.user.domainName;
+          const sessUser = user ;
+          sessionstorage.setItem('sessUser', sessUser);
+          console.log( ' username of tiger' + sessionstorage.getItem('sessUser'))
+          if(response.domainName === 'TigerAuth.com') {
+            unirest.get(`https://${ip}:4200`).send().end(response =>{
+         console.log('getting');
+         res.redirect(`https://${ip}:4200/dashboard`);
+        
+     })
+          }
+          res.json({
+            response
+          })
+        }
+      })
     } catch (err) {
       res.json({
         err

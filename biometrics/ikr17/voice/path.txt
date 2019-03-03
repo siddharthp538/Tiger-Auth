@@ -1,0 +1,5 @@
+/home/siddharthp538/Tiger-Auth/biometrics/ikr17/voice/voice_1_ikr17.wav
+/home/siddharthp538/Tiger-Auth/biometrics/ikr17/voice/voice_2_ikr17.wav
+/home/siddharthp538/Tiger-Auth/biometrics/ikr17/voice/voice_3_ikr17.wav
+/home/siddharthp538/Tiger-Auth/biometrics/ikr17/voice/voice_4_ikr17.wav
+/home/siddharthp538/Tiger-Auth/biometrics/ikr17/voice/voice_5_ikr17.wav

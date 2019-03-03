@@ -1,5 +1,0 @@
-/home/siddharthp538/Tiger-Auth/biometrics/jummachumma/voice/voice_1_jummachumma.wav
-/home/siddharthp538/Tiger-Auth/biometrics/jummachumma/voice/voice_2_jummachumma.wav
-/home/siddharthp538/Tiger-Auth/biometrics/jummachumma/voice/voice_3_jummachumma.wav
-/home/siddharthp538/Tiger-Auth/biometrics/jummachumma/voice/voice_4_jummachumma.wav
-/home/siddharthp538/Tiger-Auth/biometrics/jummachumma/voice/voice_5_jummachumma.wav

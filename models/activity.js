@@ -3,8 +3,7 @@ let mongoose = require('mongoose');
 let ActivitySchema = mongoose.Schema({
     username: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     ip: {
         type: String,
@@ -17,13 +16,7 @@ let ActivitySchema = mongoose.Schema({
     timeOfLogin: {
         type: String,
         required: true
-    },
-    typeOfDevice: {
-        type: String,
-        required: true
     }
-
-
-});
+}, { timestamps : true});
 
 let Activity = module.exports = mongoose.model('Activity', ActivitySchema);
