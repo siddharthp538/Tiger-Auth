@@ -200,26 +200,37 @@ router.post('/tigerauth' , async(req,res) => {
         })
     }
     const cookieArray = req.body.TigerAuth;
+    let found = false ;
     for(var itr =0 ; itr < cookieArray.length ;itr++ ){
+        if(found) break;
         const userObject = cookieArray[itr];
+        console.log(userObject)
         const faceTokenCheck =   await tokenVerification(userObject.faceToken);
+        console.log(faceTokenCheck)
         const otpTokenCheck =  await tokenVerification(userObject.otpToken);
+        console.log(otpTokenCheck)
         const voiceTokenCheck = await tokenVerification(userObject.voiceToken);
+        console.log(voiceTokenCheck)
         if(userObject.username === req.body.username && faceTokenCheck && otpTokenCheck && voiceTokenCheck) {
-            const userData = User.findOne({ username : req.body.username})
-            sessionStorage.setItem('sessUser' , userData)
-            console.log(sessionStorage.getItem('sessUser'))
-            unirest.get(`https://${ip}:4200`).send().end(response =>{
+            found = true;
+            console.log(userObject)
+            const userData = await  User.findOne({ username : req.body.username})
+            console.log(userData)
+            sessionstorage.setItem('sessUser' , userData)
+            console.log(sessionstorage.getItem('sessUser'))
+            unirest.get(`https://localhost:3000`).strictSSL(false).end(response =>{
             console.log('getting');
-            res.redirect(`https://${ip}:4200/profile`);
+            res.redirect(`https://google.com`);
             
         })
         }
 
     }
-    res.status(403).send({
-        message:'username not found in local storage'
-    })
+    if(!found) {
+        res.status(403).send({
+            message:'username not found in local storage'
+        })
+    }
 })
 
 
@@ -352,7 +363,8 @@ router.post('/', async (req,res) => {
                     console.log(newAccessKey)
                     const dbResponse = await newAccessKey.save();
                     console.log(dbResponse)
-                    res.status(200).send({
+                    console.log(clientData.callbackUrl)
+                    res.send({
                         link: `https://${clientData.callbackUrl}/${dbResponse._id}`,
                         response: {
                             faceRequiredByClient: false,

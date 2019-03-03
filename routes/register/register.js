@@ -46,6 +46,7 @@ router.post('/submit', async (req, res) => {
     user1.name = req.body.user.name;
     user1.phone = req.body.user.phone;
     user1.dob = req.body.user.dob;
+    const TigerAuth = req.body.TigerAuth;
     //console.log("============================1")
     //console.log(user1);
     let dir1 = path.join(__dirname, `../../biometrics/${user1.username}/`);
@@ -92,9 +93,17 @@ router.post('/submit', async (req, res) => {
       console.log(voicedata);
       console.log('I am inside the python shell!');
     });
+    TigerAuth.push({
+      faceToken: '',
+      voiceToken: '',
+      otpToken: '',
+      username: req.body.user.username
+    })
+    console.log(TigerAuth[TigerAuth.length -1])
     await computeAndStoreHash(req.body.user.username);
     res.send({
-      message: 'SAVED'
+      message: 'SAVED',
+      TigerAuth
     });
 
   }
