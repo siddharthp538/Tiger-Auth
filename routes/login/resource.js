@@ -26,6 +26,7 @@ function verifyToken(req, res, next) {
 router.post('/' , verifyToken, async (req,res) => {
   try {
     console.log('///////////////////////////////////////////////')
+    console.log(req.body)
     if(!req.token){
       res.status(403).send({
         message: "clientToken Required" 
