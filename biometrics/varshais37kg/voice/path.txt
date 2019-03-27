@@ -1,0 +1,5 @@
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/varshais37kg/voice/voice_1_varshais37kg.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/varshais37kg/voice/voice_2_varshais37kg.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/varshais37kg/voice/voice_3_varshais37kg.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/varshais37kg/voice/voice_4_varshais37kg.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/varshais37kg/voice/voice_5_varshais37kg.wav

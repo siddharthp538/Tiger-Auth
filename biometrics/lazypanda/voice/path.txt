@@ -1,0 +1,5 @@
+/home/siddharthp538/Tiger-Auth/biometrics/lazypanda/voice/voice_1_lazypanda.wav
+/home/siddharthp538/Tiger-Auth/biometrics/lazypanda/voice/voice_2_lazypanda.wav
+/home/siddharthp538/Tiger-Auth/biometrics/lazypanda/voice/voice_3_lazypanda.wav
+/home/siddharthp538/Tiger-Auth/biometrics/lazypanda/voice/voice_4_lazypanda.wav
+/home/siddharthp538/Tiger-Auth/biometrics/lazypanda/voice/voice_5_lazypanda.wav

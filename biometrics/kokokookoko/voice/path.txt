@@ -1,0 +1,5 @@
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kokokookoko/voice/voice_1_kokokookoko.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kokokookoko/voice/voice_2_kokokookoko.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kokokookoko/voice/voice_3_kokokookoko.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kokokookoko/voice/voice_4_kokokookoko.wav
+/home/sagarika12/Desktop/Tiger-Auth/biometrics/kokokookoko/voice/voice_5_kokokookoko.wav

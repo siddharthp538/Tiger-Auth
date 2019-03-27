@@ -47,7 +47,16 @@ let User1Schema = mongoose.Schema({
       required: true,
     }
 
-  }
+  },
+  applications :[{
+    clientId : {
+      type : mongoose.Types.ObjectId,
+      ref: 'client'
+    },
+    domainName: {
+      type:String
+    }
+  }]
 });
 
 let User1 = module.exports = mongoose.model('User1', User1Schema);

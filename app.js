@@ -11,12 +11,16 @@ const cookieParser = require('cookie-parser');
 const unirest = require('unirest')
 const way2sms = require('way2sms');
 const session = require('express-session');
+const helmet = require('helmet');
+const sessionstorage = require('sessionstorage');
+
+app.use(helmet());
+app.disable('x-powered-by')
 app.use(cookieParser());
 
 const ffmpeg = require('fluent-ffmpeg');
 const Activity = require('./models/activity');
 const https = require('https');
-
 let options = {
   key : fs.readFileSync('./server.key'),
   cert : fs.readFileSync('./server.crt')
@@ -39,9 +43,10 @@ mongoose.connect(mongoURI,{
 });
 
 app.get('/', async (req,res)=>{
- 
+ console.log(req.user)
  res.send('hello')
 });
+var ObjectId = require('mongodb').ObjectID;
 
 const register = require('./routes/register/register');
 const check = require('./routes/login/check').router;
@@ -50,6 +55,8 @@ const loginUsers = require('./routes/login/loginUsers');
 const login = require('./routes/login/login');
 const resource = require('./routes/login/resource');
 const logout = require('./routes/logout/logout');
+const activityStatus = require('./routes/activity/activity');
+const userdata = require('./routes/User/user')
 
 
 app.use('/register',register);
@@ -59,6 +66,8 @@ app.use('/loginUsers',loginUsers);
 app.use('/login',login);
 app.use('/login/resource', resource);
 app.use('/logout',logout);
+app.use('/activity', activityStatus);
+app.use('/userdata',userdata)
 
 //cookie parser middleware
 app.use(cookieParser());
@@ -78,11 +87,10 @@ app.use(async (req,res,next) => {
   // console.log(req.user);
   if (sessionstorage.getItem('sessUser')) {
       console.log(' username here : ' + sessionstorage.getItem('sessUser'));
-      res.body.user= sessionstorage.getItem('sessUser');
-      req.user = sessionStorage.getItem('sessUser');
+      req.user = sessionstorage.getItem('sessUser');
       console.log ('////////////////////////////');
       console.log('user deta');
-      console.log(res.user)
+      console.log(req.user)
 
   }
   res.locals.user = req.user || null;
