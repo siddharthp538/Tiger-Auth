@@ -1,5 +1,0 @@
-/home/siddharthp538/Tiger-Auth/biometrics/sih/voice/voice_1_sih.wav
-/home/siddharthp538/Tiger-Auth/biometrics/sih/voice/voice_2_sih.wav
-/home/siddharthp538/Tiger-Auth/biometrics/sih/voice/voice_3_sih.wav
-/home/siddharthp538/Tiger-Auth/biometrics/sih/voice/voice_4_sih.wav
-/home/siddharthp538/Tiger-Auth/biometrics/sih/voice/voice_5_sih.wav

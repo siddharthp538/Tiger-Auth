@@ -1,5 +1,0 @@
-/home/siddharthp538/Tiger-Auth/biometrics/boss_lavina/voice/voice_1_boss_lavina.wav
-/home/siddharthp538/Tiger-Auth/biometrics/boss_lavina/voice/voice_2_boss_lavina.wav
-/home/siddharthp538/Tiger-Auth/biometrics/boss_lavina/voice/voice_3_boss_lavina.wav
-/home/siddharthp538/Tiger-Auth/biometrics/boss_lavina/voice/voice_4_boss_lavina.wav
-/home/siddharthp538/Tiger-Auth/biometrics/boss_lavina/voice/voice_5_boss_lavina.wav

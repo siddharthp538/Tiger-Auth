@@ -1,5 +1,0 @@
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/machoman/voice/voice_1_machoman.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/machoman/voice/voice_2_machoman.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/machoman/voice/voice_3_machoman.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/machoman/voice/voice_4_machoman.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/machoman/voice/voice_5_machoman.wav

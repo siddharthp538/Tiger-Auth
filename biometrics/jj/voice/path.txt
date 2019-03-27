@@ -1,5 +1,0 @@
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/jj/voice/voice_1_jj.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/jj/voice/voice_2_jj.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/jj/voice/voice_3_jj.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/jj/voice/voice_4_jj.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/jj/voice/voice_5_jj.wav

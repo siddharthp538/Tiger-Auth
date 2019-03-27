@@ -1,5 +1,0 @@
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/isitdone/voice/voice_1_isitdone.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/isitdone/voice/voice_2_isitdone.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/isitdone/voice/voice_3_isitdone.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/isitdone/voice/voice_4_isitdone.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/isitdone/voice/voice_5_isitdone.wav

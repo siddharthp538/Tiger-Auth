@@ -1,5 +1,0 @@
-/home/siddharthp538/Tiger-Auth/biometrics/gayatri_test4/voice/voice_1_gayatri_test4.wav
-/home/siddharthp538/Tiger-Auth/biometrics/gayatri_test4/voice/voice_2_gayatri_test4.wav
-/home/siddharthp538/Tiger-Auth/biometrics/gayatri_test4/voice/voice_3_gayatri_test4.wav
-/home/siddharthp538/Tiger-Auth/biometrics/gayatri_test4/voice/voice_4_gayatri_test4.wav
-/home/siddharthp538/Tiger-Auth/biometrics/gayatri_test4/voice/voice_5_gayatri_test4.wav

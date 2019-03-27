@@ -1,5 +1,0 @@
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/lg1/voice/voice_1_lg1.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/lg1/voice/voice_2_lg1.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/lg1/voice/voice_3_lg1.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/lg1/voice/voice_4_lg1.wav
-/home/sagarika12/Desktop/Tiger-Auth/biometrics/lg1/voice/voice_5_lg1.wav

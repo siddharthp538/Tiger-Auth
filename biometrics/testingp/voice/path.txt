@@ -1,5 +1,0 @@
-/home/siddharthp538/Tiger-Auth/biometrics/testingp/voice/voice_1_testingp.wav
-/home/siddharthp538/Tiger-Auth/biometrics/testingp/voice/voice_2_testingp.wav
-/home/siddharthp538/Tiger-Auth/biometrics/testingp/voice/voice_3_testingp.wav
-/home/siddharthp538/Tiger-Auth/biometrics/testingp/voice/voice_4_testingp.wav
-/home/siddharthp538/Tiger-Auth/biometrics/testingp/voice/voice_5_testingp.wav
